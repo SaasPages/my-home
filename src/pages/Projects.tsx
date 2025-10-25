@@ -2,6 +2,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ExternalLink, Github } from 'lucide-react';
+import VideoBackground from '@/components/VideoBackground';
 
 const Projects = () => {
   const projects = [
@@ -62,7 +63,8 @@ const Projects = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4">
+    <div className="min-h-screen pt-24 pb-16 px-4 relative">
+      <VideoBackground />
       <div className="container mx-auto max-w-6xl">
         <div className="animate-fade-in-up">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Projects</h1>

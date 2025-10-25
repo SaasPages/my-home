@@ -1,6 +1,7 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { GraduationCap, Award, BookOpen } from 'lucide-react';
+import VideoBackground from '@/components/VideoBackground';
 
 const Education = () => {
   const education = [
@@ -63,7 +64,8 @@ const Education = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4">
+    <div className="min-h-screen pt-24 pb-16 px-4 relative">
+      <VideoBackground />
       <div className="container mx-auto max-w-4xl">
         <div className="animate-fade-in-up">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Education</h1>

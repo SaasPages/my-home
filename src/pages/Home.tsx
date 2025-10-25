@@ -1,10 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import VideoBackground from '@/components/VideoBackground';
 
 const Home = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <VideoBackground />
       <section className="gradient-bg min-h-screen flex items-center justify-center px-4">
         <div className="text-center max-w-4xl mx-auto animate-fade-in-up">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary-foreground">

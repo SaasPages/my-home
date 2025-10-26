@@ -153,7 +153,7 @@ const Gallery = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Video Gallery</h1>
           <div className="h-1 w-20 bg-primary mb-8 rounded"></div>
           <p className="text-lg text-muted-foreground mb-12 max-w-2xl">
-            Watch modern design-driven slides with a cinematic feel — swipe, autoplay, and play inline.
+            Let me know what direction you’d like, and I’ll craft the perfect quote for your video gallery!​​​​​​​​​​​​​​​​
           </p>
 
           {/* Sliding animation / cinematic carousel */}

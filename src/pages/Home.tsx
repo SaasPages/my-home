@@ -228,7 +228,7 @@ const Home = () => {
 
           {/* Subtitle */}
           <p className="text-sm mb-6 text-primary-foreground/90 leading-relaxed px-2">
-            Crafting beautiful digital experiences with passion and precision across all platforms
+            We are using the VideoBackground component, which we assume is already built.
           </p>
 
           {/* CTA Buttons */}
@@ -292,7 +292,7 @@ const Home = () => {
             What I Do
           </h2>
           <p className="text-xs text-muted-foreground mb-6 px-2">
-            I specialize in creating modern web experiences that combine stunning design with powerful functionality
+            We are not using the separate LogoSlider component from the previous example but will create a simpler one.
           </p>
           
           <div className="grid grid-cols-1 gap-3">

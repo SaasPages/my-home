@@ -227,7 +227,7 @@ const Home = () => {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm mb-6 text-primary-foreground/90 leading-relaxed px-2">
+          <p className="text-sm mb-6 text-primary-foreground/0 leading-relaxed px-2">
             Crafting beautiful digital experiences with passion and precision across all platforms
           </p>
 
@@ -248,7 +248,7 @@ const Home = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full h-11 text-sm font-semibold bg-transparent text-primary-foreground border-primary-foreground/40 hover:bg-primary-foreground/10 transition-all duration-300"
+                className="w-full h-11 text-sm font-semibold bg-transparent text-primary-foreground border-primary-foreground/0.3 hover:bg-primary-foreground/0.2 transition-all duration-300"
               >
                 Get in Touch
               </Button>
@@ -261,7 +261,7 @@ const Home = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-10 px-4 bg-background/50 backdrop-blur-sm">
+      <section className="py-10 px-4 bg-background/0.2 backdrop-blur-sm">
         <div className="max-w-md mx-auto">
           <div className="grid grid-cols-1 gap-3">
             {[
@@ -271,7 +271,7 @@ const Home = () => {
             ].map((stat, index) => (
               <div 
                 key={index}
-                className="glass p-4 rounded-lg text-center backdrop-blur-sm border border-white/20 transition-all duration-300"
+                className="glass p-4 rounded-lg text-center backdrop-blur-sm border border-white/0.2 transition-all duration-300"
               >
                 <div className="text-xl font-bold text-primary mb-1">
                   {stat.number}
@@ -286,7 +286,7 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-10 px-4 bg-muted/30 backdrop-blur-sm">
+      <section className="py-10 px-4 bg-muted/0.3 backdrop-blur-sm">
         <div className="max-w-md mx-auto text-center">
           <h2 className="text-lg font-bold mb-4 text-primary-foreground">
             What I Do
@@ -304,7 +304,7 @@ const Home = () => {
             ].map((service, index) => (
               <div 
                 key={index}
-                className="glass p-4 rounded-lg text-left backdrop-blur-sm border border-white/20 transition-all duration-300"
+                className="glass p-4 rounded-lg text-left backdrop-blur-sm border border-white/0.3 transition-all duration-300"
               >
                 <h3 className="text-sm font-bold mb-2 text-primary-foreground">
                   {service.title}
@@ -319,7 +319,7 @@ const Home = () => {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-8 px-4 text-center bg-background/10 backdrop-blur-sm">
+      <section className="py-8 px-4 text-center bg-background/0.3 backdrop-blur-sm">
         <div className="max-w-md mx-auto">
           <h3 className="text-base font-bold mb-3 text-primary-foreground">
             Ready to Start Your Project?

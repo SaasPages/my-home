@@ -1,166 +1,209 @@
-import React from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import VideoBackground from '@/components/VideoBackground';
 
-const brands = [
-  {
-    name: 'Upwork',
-    url: 'https://www.upwork.com',
-    bg: '#6fdc6f',
-    fg: '#0b3b20',
-    initials: 'U',
-  },
-  {
-    name: 'Firefox',
-    url: 'https://www.mozilla.org/firefox',
-    bg: '#ff9400',
-    fg: '#fff',
-    initials: 'F',
-  },
-  {
-    name: 'Apple',
-    url: 'https://www.apple.com',
-    bg: '#000000',
-    fg: '#fff',
-    initials: '',
-  },
-  {
-    name: 'Google',
-    url: 'https://www.google.com',
-    bg: '#ffffff',
-    fg: '#202124',
-    initials: 'G',
-  },
-  {
-    name: 'Microsoft',
-    url: 'https://www.microsoft.com',
-    bg: '#f25022',
-    fg: '#fff',
-    initials: 'M',
-  },
-  {
-    name: 'Facebook',
-    url: 'https://www.facebook.com',
-    bg: '#1877f2',
-    fg: '#fff',
-    initials: 'f',
-  },
-  {
-    name: 'YouTube',
-    url: 'https://www.youtube.com',
-    bg: '#ff0000',
-    fg: '#fff',
-    initials: '▶',
-  },
-];
+type Logo = {
+  id: string;
+  label: string;
+  bg: string;
+  fg?: string;
+};
 
-const Slider = ({ speed = 18 }: { speed?: number }) => {
-  // speed is seconds for a full loop
-  const styleVar = { ['--speed' as any]: `${speed}s` } as React.CSSProperties;
+const DEFAULT_SPEED = 18; // seconds for one full loop
+
+const LogoSlider: React.FC<{
+  logos: Logo[];
+  initialSpeed?: number;
+}> = ({ logos, initialSpeed = DEFAULT_SPEED }) => {
+  const [speed, setSpeed] = useState<number>(initialSpeed);
+
+  const doubled = useMemo(() => {
+    // duplicate the array so the animation can loop seamlessly
+    return [...logos, ...logos];
+  }, [logos]);
 
   return (
-    <div className="my-12">
-      <div className="max-w-6xl mx-auto">
-        <h3 className="text-xl font-bold mb-4 text-center">Trusted by</h3>
-        <div className="slider overflow-hidden" style={styleVar as React.CSSProperties}>
-          <div className="track flex items-center gap-6">
-            {brands.map((b) => (
-              <a
-                key={b.name}
-                href={b.url}
-                target="_blank"
-                rel="noreferrer"
-                className="logo-item block"
-                aria-label={b.name}
-                style={{ textDecoration: 'none' }}
-              >
-                <div
-                  className="logo flex items-center justify-center text-xl font-semibold"
-                  style={{ background: b.bg, color: b.fg }}
-                >
-                  <span>{b.initials}</span>
-                </div>
-                <div className="mt-2 text-center text-sm text-muted-foreground">{b.name}</div>
-              </a>
-            ))}
-            {/* duplicate for seamless scroll */}
-            {brands.map((b) => (
-              <a
-                key={b.name + '-dup'}
-                href={b.url}
-                target="_blank"
-                rel="noreferrer"
-                className="logo-item block"
-                aria-hidden
-                style={{ textDecoration: 'none' }}
-              >
-                <div
-                  className="logo flex items-center justify-center text-xl font-semibold"
-                  style={{ background: b.bg, color: b.fg }}
-                >
-                  <span>{b.initials}</span>
-                </div>
-                <div className="mt-2 text-center text-sm text-muted-foreground">{b.name}</div>
-              </a>
-            ))}
+    <div className="mt-10">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xl font-semibold">Our Brand Partners</h3>
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground mr-2">Speed</span>
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setSpeed((s) => Math.max(4, Math.round((s - 2) * 10) / 10))}
+            >
+              −
+            </Button>
+            <div className="px-3 py-2 rounded-md bg-muted/20 text-sm">
+              {speed}s
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setSpeed((s) => Math.min(60, Math.round((s + 2) * 10) / 10))}
+            >
+              +
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Inline styles for slider and golden animation */}
-      <style>{`
-        .slider { --speed: 18s; }
-        .track { display: flex; align-items: center; gap: 1.5rem; animation: scroll var(--speed) linear infinite; }
-        .logo-item { width: 120px; flex: 0 0 auto; }
-        .logo { width: 72px; height: 72px; border-radius: 9999px; box-shadow: 0 6px 18px rgba(0,0,0,0.18); position: relative; font-size: 1.25rem; }
+      <div
+        className="relative overflow-hidden"
+        aria-hidden={false}
+        // CSS variable used by the keyframes to control speed
+        style={{ ['--slider-speed' as any]: `${speed}s` }}
+      >
+        {/* Inline styles for the slider animation & shimmer effect */}
+        <style>{`
+          @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
 
-        /* golden animated ring */
-        .logo::after {
-          content: '';
-          position: absolute;
-          inset: -6px;
-          border-radius: 9999px;
-          background: conic-gradient(from 0deg, rgba(255,215,0,0.95), rgba(255,215,0,0.6), rgba(255,215,0,0.2), rgba(255,215,0,0.95));
-          filter: blur(8px);
-          opacity: 0.9;
-          transform: scale(1);
-          animation: spinGlow 3.5s linear infinite;
-          z-index: -1;
-        }
+          .logo-track {
+            display: inline-flex;
+            gap: 1rem;
+            align-items: center;
+            /* animate translateX to -50% (because we duplicated items) */
+            animation: scroll-left var(--slider-speed) linear infinite;
+            will-change: transform;
+          }
 
-        /* make sure on white logos the golden ring sits behind */
-        .logo { position: relative; z-index: 1; }
+          /* pause animation on hover to allow the user to inspect logos */
+          .logo-track:hover {
+            animation-play-state: paused;
+          }
 
-        @keyframes spinGlow {
-          0% { transform: rotate(0deg) scale(1); }
-          50% { transform: rotate(180deg) scale(1.02); }
-          100% { transform: rotate(360deg) scale(1); }
-        }
+          /* Each logo card */
+          .logo-card {
+            min-width: 160px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+            transition: transform .2s ease, box-shadow .2s ease;
+            flex-shrink: 0;
+          }
 
-        @keyframes scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
+          .logo-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(15,23,42,0.12);
+          }
 
-        /* Reduce motion respects */
-        @media (prefers-reduced-motion: reduce) {
-          .track { animation: none; }
-          .logo::after { animation: none; }
-        }
+          /* golden shimmer overlay */
+          .logo-card::after {
+            content: "";
+            position: absolute;
+            top: -40%;
+            left: -40%;
+            width: 60%;
+            height: 180%;
+            background: linear-gradient(90deg, rgba(255,215,0,0) 0%, rgba(255,215,0,0.45) 50%, rgba(255,215,0,0) 100%);
+            transform: rotate(-25deg);
+            animation: shimmer 2.2s linear infinite;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+            opacity: 0.9;
+          }
 
-        /* smaller screens adjustments */
-        @media (max-width: 640px) {
-          .logo-item { width: 92px; }
-          .logo { width: 56px; height: 56px; font-size: 1rem; }
-        }
-      `}</style>
+          @keyframes shimmer {
+            0% { transform: translateX(-220%) rotate(-25deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            50% { transform: translateX(120%) rotate(-25deg); opacity: 0.7; }
+            100% { transform: translateX(220%) rotate(-25deg); opacity: 0; }
+          }
+
+          /* Make sure logos are readable on their brand backgrounds */
+          .logo-inner {
+            z-index: 2;
+            display:flex;
+            align-items:center;
+            gap:0.75rem;
+            padding: 0 1rem;
+          }
+
+          .logo-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:700;
+            font-size:14px;
+            color: white;
+            flex-shrink:0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08) inset;
+          }
+
+          /* subdued label for brand name */
+          .logo-label {
+            color: rgba(255,255,255,0.95);
+            font-weight: 600;
+          }
+
+          /* small screens: allow smaller logo widths */
+          @media (max-width: 640px) {
+            .logo-card { min-width: 130px; height: 60px; }
+            .logo-mark { width: 36px; height: 36px; font-size:13px; border-radius:8px; }
+          }
+        `}</style>
+
+        <div className="logo-track" style={{ whiteSpace: 'nowrap' }}>
+          {doubled.map((l, idx) => (
+            <div
+              key={`${l.id}-${idx}`}
+              className="logo-card"
+              style={{ background: l.bg }}
+              role="img"
+              aria-label={l.label}
+              title={l.label}
+            >
+              <div className="logo-inner">
+                <div
+                  className="logo-mark"
+                  style={{ background: (l.fg ? l.fg : 'rgba(0,0,0,0.08)') }}
+                >
+                  {/* use initials as a lightweight mark */}
+                  {l.label
+                    .split(' ')
+                    .map((p) => p[0])
+                    .slice(0, 2)
+                    .join('')
+                    .toUpperCase()}
+                </div>
+                <div className="logo-label">{l.label}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
 
 const Home = () => {
+  // brand background colors (kept accessible & visually distinct)
+  const logos: Logo[] = [
+    { id: 'upwork', label: 'Upwork', bg: '#1fb57a', fg: 'rgba(255,255,255,0.06)' },
+    { id: 'firefox', label: 'Firefox', bg: '#ff9400', fg: 'rgba(255,255,255,0.06)' },
+    { id: 'apple', label: 'Apple', bg: '#111827', fg: 'rgba(255,255,255,0.06)' },
+    { id: 'google', label: 'Google', bg: '#ffffff', fg: '#f3f4f6' },
+    { id: 'microsoft', label: 'Microsoft', bg: '#f3f4f6', fg: '#111827' },
+    { id: 'facebook', label: 'Facebook', bg: '#1877f2', fg: 'rgba(255,255,255,0.06)' },
+    { id: 'youtube', label: 'YouTube', bg: '#ff0000', fg: 'rgba(255,255,255,0.06)' },
+  ];
+
   return (
     <div className="min-h-screen relative">
       <VideoBackground overlayOpacity={0.14} />
@@ -194,12 +237,10 @@ const Home = () => {
               </Button>
             </Link>
           </div>
-        </div>
-      </section>
 
-      {/* Logo slider added here */}
-      <section className="py-8 px-4 bg-transparent">
-        <Slider speed={18} />
+          {/* Logo slider placed beneath hero CTAs */}
+          <LogoSlider logos={logos} initialSpeed={DEFAULT_SPEED} />
+        </div>
       </section>
 
       {/* The rest of the page stays the same — VideoBackground covers the full page behind this content */}

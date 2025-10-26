@@ -2,44 +2,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import VideoBackground from '@/components/VideoBackground';
-
-const logos = [
-  {
-    name: 'Upwork',
-    href: 'https://www.upwork.com/',
-    src: 'https://raw.githubusercontent.com/simple-icons/simple-icons/main/icons/upwork.svg',
-  },
-  {
-    name: 'Firefox',
-    href: 'https://www.mozilla.org/firefox/',
-    src: 'https://raw.githubusercontent.com/simple-icons/simple-icons/main/icons/firefox.svg',
-  },
-  {
-    name: 'Apple',
-    href: 'https://www.apple.com/',
-    src: 'https://raw.githubusercontent.com/simple-icons/simple-icons/main/icons/apple.svg',
-  },
-  {
-    name: 'Google',
-    href: 'https://www.google.com/',
-    src: 'https://raw.githubusercontent.com/simple-icons/simple-icons/main/icons/google.svg',
-  },
-  {
-    name: 'Microsoft',
-    href: 'https://www.microsoft.com/',
-    src: 'https://raw.githubusercontent.com/simple-icons/simple-icons/main/icons/microsoft.svg',
-  },
-  {
-    name: 'Facebook',
-    href: 'https://www.facebook.com/',
-    src: 'https://raw.githubusercontent.com/simple-icons/simple-icons/main/icons/facebook.svg',
-  },
-  {
-    name: 'YouTube',
-    href: 'https://www.youtube.com/',
-    src: 'https://raw.githubusercontent.com/simple-icons/simple-icons/main/icons/youtube.svg',
-  },
-];
+import TechStackSlider from '@/components/TechStackSlider';
 
 const Home = () => {
   return (
@@ -77,6 +40,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Tech stack slider (animated logos) */}
+      <TechStackSlider />
 
       {/* The rest of the page stays the same — VideoBackground covers the full page behind this content */}
       <section className="py-20 px-4">
@@ -124,37 +90,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Trusted logos with slide animation */}
-      <section className="py-12 px-4">
-        <div className="container mx-auto max-w-6xl text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-8">Trusted by</h2>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-6 items-center justify-items-center">
-            {logos.map((logo, index) => (
-              <a
-                key={logo.name}
-                href={logo.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass p-4 rounded-lg flex items-center justify-center w-28 h-20 transition-transform duration-300 hover:-translate-y-2"
-                style={{ opacity: 0, animation: `fade-in-up 600ms ease ${index * 100}ms forwards` }}
-                aria-label={logo.name}
-              >
-                {/* Using remote simple-icons SVGs. They render with currentColor by default; we set img to 48% height to keep it balanced */}
-                <img
-                  src={logo.src}
-                  alt={logo.name}
-                  className="max-h-10 max-w-full object-contain filter grayscale-0"
-                  style={{ color: 'currentColor' }}
-                />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Reuse existing sections or add more below as needed */}
     </div>
   );
 };

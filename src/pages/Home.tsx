@@ -26,7 +26,7 @@ const LogoSlider: React.FC<{
   }, [logos]);
 
   return (
-    <div className="mt-10 lg:mt-16">
+    <div className="flex mt-10 lg:mt-16">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary-foreground">
           Trusted by Industry Leaders
@@ -250,8 +250,8 @@ const Home = () => {
     { id: 'upwork', label: 'Upwork', bg: 'linear-gradient(135deg, #1fb57a, #14a871)', fg: 'rgba(255,255,255,0.08)' },
     { id: 'firefox', label: 'Firefox', bg: 'linear-gradient(135deg, #ff9400, #e68500)', fg: 'rgba(255,255,255,0.08)' },
     { id: 'apple', label: 'Apple', bg: 'linear-gradient(135deg, #111827, #000000)', fg: 'rgba(255,255,255,0.08)' },
-    { id: 'google', label: 'Google', bg: 'linear-gradient(135deg, #CA3F16, #F3F4F5)', fg: '#f1f5f9' },
-    { id: 'microsoft', label: 'Microsoft', bg: 'linear-gradient(135deg, #f3f4f6, #e5e7eb)', fg: '#374151' },
+    { id: 'google', label: 'Google', bg: 'linear-gradient(135deg, #CA3F16, #F3F4F5)', fg: '#FF5A45' },
+    { id: 'microsoft', label: 'Microsoft', bg: 'linear-gradient(135deg, #F4F1EC, #9BACD8)', fg: '#111144' },
     { id: 'facebook', label: 'Facebook', bg: 'linear-gradient(135deg, #1877f2, #1669d6)', fg: 'rgba(255,255,255,0.08)' },
     { id: 'youtube', label: 'YouTube', bg: 'linear-gradient(135deg, #ff0000, #e60000)', fg: 'rgba(255,255,255,0.08)' },
   ];

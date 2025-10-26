@@ -1,28 +1,38 @@
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import VideoBackground from '@/components/VideoBackground';
 
 const Home = () => {
   return (
     <div className="min-h-screen relative">
-      <VideoBackground />
-      <section className="gradient-bg min-h-screen flex items-center justify-center px-4">
+      <VideoBackground overlayOpacity={0.14} />
+
+      {/* Hero content — removed the heavy gradient-bg wrapper so the video is visible */}
+      <section className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center max-w-4xl mx-auto animate-fade-in-up">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary-foreground">
             Creative Designer & Developer
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-primary-foreground/0">
+
+          {/* fixed subtitle opacity (previously /0 made it invisible) */}
+          <p className="text-xl md:text-2xl mb-8 text-primary-foreground/90">
             Crafting beautiful digital experiences with passion and precision
           </p>
+
           <div className="flex flex-wrap gap-4 justify-center">
             <Link to="/projects">
               <Button size="lg" variant="secondary">
                 View Projects <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
+
             <Link to="/contact">
-              <Button size="lg" variant="outline" className="bg-transparent text-primary-foreground border-primary-foreground/0 hover:bg-primary-foreground/10">
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-transparent text-primary-foreground border-primary-foreground/0 hover:bg-primary-foreground/10"
+              >
                 Get in Touch
               </Button>
             </Link>
@@ -30,6 +40,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* The rest of the page stays the same — VideoBackground covers the full page behind this content */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-3 gap-8">

@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Pause, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -12,7 +12,7 @@ type Logo = {
   fg?: string;
 };
 
-const DEFAULT_SPEED = 18;
+const DEFAULT_SPEED = 20;
 
 const LogoSlider: React.FC<{
   logos: Logo[];
@@ -26,48 +26,49 @@ const LogoSlider: React.FC<{
   }, [logos]);
 
   return (
-    <div className="flex mt-10 lg:mt-16">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-        <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary-foreground">
+    <div className="flex flex-col w-full mt-6">
+      {/* Header and Controls */}
+      <div className="flex flex-col items-center justify-between gap-3 mb-4 w-full">
+        <h3 className="text-lg font-semibold text-primary-foreground text-center">
           Trusted by Industry Leaders
         </h3>
 
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div className="flex items-center justify-center w-full gap-3">
           {/* Play/Pause Controls */}
           <Button
             size="sm"
             variant="outline"
             onClick={() => setIsPaused(!isPaused)}
-            className="flex bg-transparent border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
+            className="flex bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/15 h-8 w-8 p-0"
           >
             {isPaused ? (
-              <Play className="w-4 h-4" />
+              <Play className="w-3 h-3" />
             ) : (
-              <Pause className="w-4 h-4" />
+              <Pause className="w-3 h-3" />
             )}
           </Button>
 
-          <div className="flex items-center gap-2 flex-1 sm:flex-initial">
-            <span className="text-sm text-primary-foreground/80 whitespace-nowrap">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-primary-foreground/80 whitespace-nowrap">
               Speed
             </span>
             <div className="flex gap-1">
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => setSpeed((s) => Math.max(4, Math.round((s - 2) * 10) / 10))}
-                className="bg-transparent border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 h-8 w-8 p-0"
+                onClick={() => setSpeed((s) => Math.max(6, s - 2))}
+                className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/15 h-7 w-7 p-0 text-xs"
               >
                 −
               </Button>
-              <div className="flex px-3 py-1 rounded-md bg-primary-foreground/10 text-primary-foreground text-sm min-w-[60px] text-center">
+              <div className="flex px-2 py-1 rounded bg-primary-foreground/15 text-primary-foreground text-xs min-w-[45px] text-center items-center justify-center">
                 {speed}s
               </div>
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => setSpeed((s) => Math.min(60, Math.round((s + 2) * 10) / 10))}
-                className="flex bg-transparent border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 h-8 w-8 p-0"
+                onClick={() => setSpeed((s) => Math.min(40, s + 2))}
+                className="flex bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/15 h-7 w-7 p-0 text-xs"
               >
                 +
               </Button>
@@ -76,8 +77,9 @@ const LogoSlider: React.FC<{
         </div>
       </div>
 
+      {/* Logo Slider */}
       <div
-        className="relative overflow-hidden"
+        className="relative overflow-hidden w-full"
         aria-hidden={false}
         style={{ ['--slider-speed' as any]: `${speed}s` }}
       >
@@ -89,7 +91,7 @@ const LogoSlider: React.FC<{
 
           .logo-track {
             display: inline-flex;
-            gap: 1rem;
+            gap: 0.5rem;
             align-items: center;
             animation: scroll-left var(--slider-speed) linear infinite;
             will-change: transform;
@@ -100,114 +102,70 @@ const LogoSlider: React.FC<{
           }
 
           .logo-card {
-            min-width: 140px;
-            height: 80px;
+            min-width: 110px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 16px;
+            border-radius: 10px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
             flex-shrink: 0;
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-          }
-
-          .logo-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-          }
-
-          .logo-card::after {
-            content: "";
-            position: absolute;
-            top: -40%;
-            left: -40%;
-            width: 60%;
-            height: 180%;
-            background: linear-gradient(90deg, rgba(255,215,0,0) 0%, rgba(255,215,0,0.35) 50%, rgba(255,215,0,0) 100%);
-            transform: rotate(-25deg);
-            animation: shimmer 3s linear infinite;
-            pointer-events: none;
-            mix-blend-mode: overlay;
-            opacity: 0.8;
-          }
-
-          @keyframes shimmer {
-            0% { transform: translateX(-220%) rotate(-25deg); opacity: 0; }
-            10% { opacity: 0.5; }
-            50% { transform: translateX(120%) rotate(-25deg); opacity: 0.7; }
-            100% { transform: translateX(220%) rotate(-25deg); opacity: 0; }
+            border: 1px solid rgba(255, 255, 255, 0.15);
           }
 
           .logo-inner {
             z-index: 2;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0 1rem;
+            gap: 0.5rem;
+            padding: 0 0.5rem;
           }
 
           .logo-mark {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 10px;
             color: white;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) inset;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) inset;
             backdrop-filter: blur(4px);
           }
 
           .logo-label {
             color: rgba(255, 255, 255, 0.95);
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 0.7rem;
             white-space: nowrap;
           }
 
-          /* Mobile Styles */
-          @media (max-width: 640px) {
+          /* Tablet and Desktop - hidden on mobile */
+          @media (min-width: 768px) {
             .logo-card { 
-              min-width: 120px; 
-              height: 70px; 
-              border-radius: 12px;
+              min-width: 140px; 
+              height: 75px; 
             }
             .logo-mark { 
-              width: 36px; 
-              height: 36px; 
+              width: 40px; 
+              height: 40px; 
               font-size: 12px; 
-              border-radius: 10px; 
             }
             .logo-label {
-              font-size: 0.75rem;
-            }
-            .logo-inner {
-              gap: 0.5rem;
-              padding: 0 0.75rem;
-            }
-          }
-
-          /* Tablet Styles */
-          @media (min-width: 641px) and (max-width: 1024px) {
-            .logo-card { 
-              min-width: 150px; 
-              height: 85px; 
+              font-size: 0.8rem;
             }
           }
 
           /* Reduced motion support */
           @media (prefers-reduced-motion: reduce) {
             .logo-track {
-              animation: none;
-            }
-            .logo-card::after {
               animation: none;
             }
           }
@@ -221,12 +179,11 @@ const LogoSlider: React.FC<{
               style={{ background: l.bg }}
               role="img"
               aria-label={l.label}
-              title={l.label}
             >
               <div className="logo-inner">
                 <div
                   className="logo-mark"
-                  style={{ background: (l.fg ? l.fg : 'rgba(0,0,0,0.12)') }}
+                  style={{ background: (l.fg ? l.fg : 'rgba(0,0,0,0.15)') }}
                 >
                   {l.label
                     .split(' ')
@@ -252,48 +209,46 @@ const Home = () => {
     { id: 'apple', label: 'Apple', bg: 'linear-gradient(135deg, #111827, #000000)', fg: 'rgba(255,255,255,0.08)' },
     { id: 'google', label: 'Google', bg: 'linear-gradient(135deg, #CA3F16, #F3F4F5)', fg: '#FF5A45' },
     { id: 'microsoft', label: 'Microsoft', bg: 'linear-gradient(135deg, #F4F1EC, #9BACD8)', fg: '#111144' },
-    { id: 'facebook', label: 'Facebook', bg: 'linear-gradient(135deg, #1877f2, #1669d6)', fg: 'rgba(255,255,255,0.08)' },
-    { id: 'youtube', label: 'YouTube', bg: 'linear-gradient(135deg, #ff0000, #e60000)', fg: 'rgba(255,255,255,0.08)' },
   ];
 
   return (
     <div className="min-h-screen relative">
-      <VideoBackground overlayOpacity={0.14} />
+      <VideoBackground overlayOpacity={0.16} />
 
       {/* Hero Section */}
-      <section className="flex min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-4xl mx-auto animate-fade-in-up">
+      <section className="flex min-h-screen items-center justify-center px-4 py-16">
+        <div className="text-center w-full max-w-md mx-auto">
           {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-primary-foreground leading-tight">
+          <h1 className="text-2xl font-bold mb-3 text-primary-foreground leading-snug">
             Creative Designer
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 mt-1">
               & Developer
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg sm:text-xl md:text-2xl mb-8 lg:mb-12 text-primary-foreground/0.5 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm mb-6 text-primary-foreground/90 leading-relaxed px-2">
             Crafting beautiful digital experiences with passion and precision across all platforms
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 lg:mb-16">
-            <Link to="/projects" className="flex-1 sm:flex-initial">
+          <div className="flex flex-col gap-3 justify-center mb-8 px-2">
+            <Link to="/projects">
               <Button 
                 size="lg" 
                 variant="secondary"
-                className="flex w-full sm:w-auto h-12 px-8 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                className="w-full h-11 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 View Projects 
-                <ArrowRight className="ml-2 w-5 h-5" />
+                <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
 
-            <Link to="/contact" className="flex-1 sm:flex-initial">
+            <Link to="/contact">
               <Button
                 size="lg"
                 variant="outline"
-                className="flex w-full sm:w-auto h-12 px-8 text-base font-semibold bg-transparent text-primary-foreground border-primary-foreground/0.5 hover:bg-primary-foreground/0.5 hover:border-primary-foreground/0.5 transition-all duration-300"
+                className="w-full h-11 text-sm font-semibold bg-transparent text-primary-foreground border-primary-foreground/40 hover:bg-primary-foreground/10 transition-all duration-300"
               >
                 Get in Touch
               </Button>
@@ -306,9 +261,9 @@ const Home = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+      <section className="py-10 px-4 bg-background/50 backdrop-blur-sm">
+        <div className="max-w-md mx-auto">
+          <div className="grid grid-cols-1 gap-3">
             {[
               { number: '50+', label: 'Projects Completed' },
               { number: '30+', label: 'Happy Clients' },
@@ -316,12 +271,12 @@ const Home = () => {
             ].map((stat, index) => (
               <div 
                 key={index}
-                className="glass p-6 lg:p-8 rounded-2xl text-center backdrop-blur-sm border border-white/0.3 hover:border-white/0 transition-all duration-300"
+                className="glass p-4 rounded-lg text-center backdrop-blur-sm border border-white/20 transition-all duration-300"
               >
-                <div className="text-3xl lg:text-4xl font-bold text-primary mb-3">
+                <div className="text-xl font-bold text-primary mb-1">
                   {stat.number}
                 </div>
-                <p className="text-muted-foreground text-sm lg:text-base">
+                <p className="text-muted-foreground text-xs">
                   {stat.label}
                 </p>
               </div>
@@ -331,35 +286,52 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="flex py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-muted/0.5 backdrop-blur-sm">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 text-primary-foreground">
+      <section className="py-10 px-4 bg-muted/30 backdrop-blur-sm">
+        <div className="max-w-md mx-auto text-center">
+          <h2 className="text-lg font-bold mb-4 text-primary-foreground">
             What I Do
           </h2>
-          <p className="text-base sm:text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
-            I specialize in creating modern web experiences that combine stunning design with powerful functionality across all devices
+          <p className="text-xs text-muted-foreground mb-6 px-2">
+            I specialize in creating modern web experiences that combine stunning design with powerful functionality
           </p>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 gap-3">
             {[
               { title: 'Web Design', description: 'Creating beautiful, intuitive interfaces that users love' },
-              { title: 'Web Development', description: 'Building robust, scalable applications with modern technologies' },
+              { title: 'Web Development', description: 'Building robust, scalable applications with modern tech' },
               { title: 'UI/UX Design', description: 'Designing experiences that delight and engage users' },
               { title: 'Consulting', description: 'Helping businesses achieve their digital goals' }
             ].map((service, index) => (
               <div 
                 key={index}
-                className="glass p-6 lg:p-8 rounded-2xl text-left backdrop-blur-sm border border-white/0 hover:border-white/0 transition-all duration-110 hover:transform hover:-translate-y-1"
+                className="glass p-4 rounded-lg text-left backdrop-blur-sm border border-white/20 transition-all duration-300"
               >
-                <h3 className="text-lg lg:text-xl font-bold mb-3 text-primary-foreground">
+                <h3 className="text-sm font-bold mb-2 text-primary-foreground">
                   {service.title}
                 </h3>
-                <p className="text-muted-foreground text-sm lg:text-base">
+                <p className="text-muted-foreground text-xs leading-relaxed">
                   {service.description}
                 </p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Footer CTA */}
+      <section className="py-8 px-4 text-center bg-background/10 backdrop-blur-sm">
+        <div className="max-w-md mx-auto">
+          <h3 className="text-base font-bold mb-3 text-primary-foreground">
+            Ready to Start Your Project?
+          </h3>
+          <Link to="/contact">
+            <Button 
+              size="lg"
+              className="w-full max-w-xs h-11 text-sm font-semibold bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
+            >
+              Get Started Today
+            </Button>
+          </Link>
         </div>
       </section>
     </div>

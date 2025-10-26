@@ -22,7 +22,7 @@ const Home = () => {
               </Button>
             </Link>
             <Link to="/contact">
-              <Button size="lg" variant="outline" className="bg-transparent text-primary-foreground border-primary-foreground/50 hover:bg-primary-foreground/10">
+              <Button size="lg" variant="outline" className="bg-transparent text-primary-foreground border-primary-foreground/0 hover:bg-primary-foreground/0">
                 Get in Touch
               </Button>
             </Link>

@@ -1,205 +1,14 @@
-import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Pause, Play } from 'lucide-react';
+import { ArrowRight, Sparkles, Code2, Palette, Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import VideoBackground from '@/components/VideoBackground';
-import { cn } from '@/lib/utils';
+import LogosSlider from '@/components/LogosSlider';
 
 type Logo = {
   id: string;
   label: string;
   bg: string;
   fg?: string;
-};
-
-const DEFAULT_SPEED = 20;
-
-const LogoSlider: React.FC<{
-  logos: Logo[];
-  initialSpeed?: number;
-}> = ({ logos, initialSpeed = DEFAULT_SPEED }) => {
-  const [speed, setSpeed] = useState<number>(initialSpeed);
-  const [isPaused, setIsPaused] = useState(false);
-
-  const doubled = useMemo(() => {
-    return [...logos, ...logos];
-  }, [logos]);
-
-  return (
-    <div className="flex flex-col w-full mt-6">
-      {/* Header and Controls */}
-      <div className="flex flex-col items-center justify-between gap-3 mb-4 w-full">
-        <h3 className="text-lg font-semibold text-primary-foreground text-center">
-          Trusted by Industry Leaders
-        </h3>
-
-        <div className="flex items-center justify-center w-full gap-3">
-          {/* Play/Pause Controls */}
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setIsPaused(!isPaused)}
-            className="flex bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/15 h-8 w-8 p-0"
-          >
-            {isPaused ? (
-              <Play className="w-3 h-3" />
-            ) : (
-              <Pause className="w-3 h-3" />
-            )}
-          </Button>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-primary-foreground/80 whitespace-nowrap">
-              Speed
-            </span>
-            <div className="flex gap-1">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setSpeed((s) => Math.max(6, s - 2))}
-                className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/15 h-7 w-7 p-0 text-xs"
-              >
-                −
-              </Button>
-              <div className="flex px-2 py-1 rounded bg-primary-foreground/15 text-primary-foreground text-xs min-w-[45px] text-center items-center justify-center">
-                {speed}s
-              </div>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setSpeed((s) => Math.min(40, s + 2))}
-                className="flex bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/15 h-7 w-7 p-0 text-xs"
-              >
-                +
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Logo Slider */}
-      <div
-        className="relative overflow-hidden w-full"
-        aria-hidden={false}
-        style={{ ['--slider-speed' as any]: `${speed}s` }}
-      >
-        <style>{`
-          @keyframes scroll-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-
-          .logo-track {
-            display: inline-flex;
-            gap: 0.5rem;
-            align-items: center;
-            animation: scroll-left var(--slider-speed) linear infinite;
-            will-change: transform;
-          }
-
-          .logo-track.paused {
-            animation-play-state: paused;
-          }
-
-          .logo-card {
-            min-width: 110px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-          }
-
-          .logo-inner {
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0 0.5rem;
-          }
-
-          .logo-mark {
-            width: 30px;
-            height: 30px;
-            border-radius: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 10px;
-            color: white;
-            flex-shrink: 0;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) inset;
-            backdrop-filter: blur(4px);
-          }
-
-          .logo-label {
-            color: rgba(255, 255, 255, 0.95);
-            font-weight: 600;
-            font-size: 0.7rem;
-            white-space: nowrap;
-          }
-
-          /* Tablet and Desktop - hidden on mobile */
-          @media (min-width: 768px) {
-            .logo-card { 
-              min-width: 140px; 
-              height: 75px; 
-            }
-            .logo-mark { 
-              width: 40px; 
-              height: 40px; 
-              font-size: 12px; 
-            }
-            .logo-label {
-              font-size: 0.8rem;
-            }
-          }
-
-          /* Reduced motion support */
-          @media (prefers-reduced-motion: reduce) {
-            .logo-track {
-              animation: none;
-            }
-          }
-        `}</style>
-
-        <div className={cn("logo-track", isPaused && "paused")}>
-          {doubled.map((l, idx) => (
-            <div
-              key={`${l.id}-${idx}`}
-              className="logo-card"
-              style={{ background: l.bg }}
-              role="img"
-              aria-label={l.label}
-            >
-              <div className="logo-inner">
-                <div
-                  className="logo-mark"
-                  style={{ background: (l.fg ? l.fg : 'rgba(0,0,0,0.15)') }}
-                >
-                  {l.label
-                    .split(' ')
-                    .map((p) => p[0])
-                    .slice(0, 2)
-                    .join('')
-                    .toUpperCase()}
-                </div>
-                <div className="logo-label">{l.label}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
 };
 
 const Home = () => {
@@ -213,34 +22,40 @@ const Home = () => {
 
   return (
     <div className="min-h-screen relative">
-      <VideoBackground overlayOpacity={0.16} />
+      <VideoBackground />
 
       {/* Hero Section */}
       <section className="flex min-h-screen items-center justify-center px-4 py-16">
-        <div className="text-center w-full max-w-md mx-auto">
+        <div className="text-center w-full max-w-4xl mx-auto">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 mb-6 animate-fade-in">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <span className="text-xs font-medium text-primary-foreground">Welcome to My Portfolio</span>
+          </div>
+
           {/* Main Heading */}
-          <h1 className="text-2xl font-bold mb-3 text-primary-foreground leading-snug">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-primary-foreground leading-tight">
             Creative Designer
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 mt-1">
-              & Developer
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-primary-foreground mt-2 animate-fade-in">
+              & Full-Stack Developer
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm mb-6 text-primary-foreground/90 leading-relaxed px-2">
-            We are using the VideoBackground component, which we assume is already built.
+          <p className="text-base md:text-lg mb-8 text-muted-foreground leading-relaxed max-w-2xl mx-auto px-4 animate-fade-in">
+            Crafting beautiful, functional digital experiences that bring ideas to life. 
+            Specialized in modern web technologies and user-centered design.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col gap-3 justify-center mb-8 px-2">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 px-4 animate-fade-in">
             <Link to="/projects">
               <Button 
                 size="lg" 
-                variant="secondary"
-                className="w-full h-11 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                className="w-full sm:w-auto h-12 text-base font-semibold px-8 shadow-lg hover:shadow-xl transition-all duration-300 hover-scale group"
               >
-                View Projects 
-                <ArrowRight className="ml-2 w-4 h-4" />
+                View My Work
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
 
@@ -248,35 +63,57 @@ const Home = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full h-11 text-sm font-semibold bg-transparent text-primary-foreground border-primary-foreground/40 hover:bg-primary-foreground/10 transition-all duration-300"
+                className="w-full sm:w-auto h-12 text-base font-semibold px-8 bg-transparent text-primary-foreground border-primary-foreground/40 hover:bg-primary-foreground/10 transition-all duration-300 hover-scale"
               >
                 Get in Touch
               </Button>
             </Link>
           </div>
 
+          {/* Skills Highlight */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 px-4">
+            {[
+              { icon: Code2, label: 'Clean Code', color: 'text-blue-400' },
+              { icon: Palette, label: 'UI/UX Design', color: 'text-purple-400' },
+              { icon: Rocket, label: 'Fast Delivery', color: 'text-green-400' },
+              { icon: Sparkles, label: 'Innovation', color: 'text-yellow-400' }
+            ].map((item, index) => (
+              <div 
+                key={index}
+                className="glass p-4 rounded-xl backdrop-blur-sm border border-primary-foreground/10 hover:border-primary/30 transition-all duration-300 hover-scale group"
+              >
+                <item.icon className={`w-8 h-8 mx-auto mb-2 ${item.color} group-hover:scale-110 transition-transform`} />
+                <p className="text-sm font-medium text-primary-foreground">{item.label}</p>
+              </div>
+            ))}
+          </div>
+
           {/* Logo Slider */}
-          <LogoSlider logos={logos} initialSpeed={DEFAULT_SPEED} />
+          <LogosSlider logos={logos} initialSpeed={20} />
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-10 px-4 bg-background/0.2 backdrop-blur-sm">
-        <div className="max-w-md mx-auto">
-          <div className="grid grid-cols-1 gap-3">
+      <section className="py-20 px-4 bg-background/20 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-primary-foreground">
+            Achievements & Milestones
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { number: '50+', label: 'Projects Completed' },
-              { number: '30+', label: 'Happy Clients' },
-              { number: '5+', label: 'Years Experience' }
+              { number: '50+', label: 'Projects Completed', icon: Rocket },
+              { number: '30+', label: 'Happy Clients', icon: Sparkles },
+              { number: '5+', label: 'Years Experience', icon: Code2 }
             ].map((stat, index) => (
               <div 
                 key={index}
-                className="glass p-4 rounded-lg text-center backdrop-blur-sm border border-white/0.3 transition-all duration-300"
+                className="glass p-8 rounded-2xl text-center backdrop-blur-md border border-primary-foreground/20 hover:border-primary/40 transition-all duration-300 hover-scale group"
               >
-                <div className="text-xl font-bold text-primary mb-1">
+                <stat.icon className="w-12 h-12 mx-auto mb-4 text-primary group-hover:scale-110 transition-transform" />
+                <div className="text-4xl md:text-5xl font-bold text-primary mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
                   {stat.number}
                 </div>
-                <p className="text-muted-foreground text-xs">
+                <p className="text-muted-foreground text-sm font-medium">
                   {stat.label}
                 </p>
               </div>
@@ -286,30 +123,53 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-10 px-4 bg-muted/0.3 backdrop-blur-sm">
-        <div className="max-w-md mx-auto text-center">
-          <h2 className="text-lg font-bold mb-4 text-primary-foreground">
-            What I Do
+      <section className="py-20 px-4 bg-muted/10 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary-foreground">
+            What I Offer
           </h2>
-          <p className="text-xs text-muted-foreground mb-6 px-2">
-            We are not using the separate LogoSlider component from the previous example but will create a simpler one.
+          <p className="text-base text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Comprehensive digital solutions tailored to your needs, from concept to deployment
           </p>
           
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { title: 'Web Design', description: 'Once you give me these details, I can craft something that truly represents you!​​​​​​​​​​​​​​​​' },
-              { title: 'Web Development', description: 'Is there something specific you’d like to explore or work on together?​​​​​​​​​​​​​​​​' },
-              { title: 'UI/UX Design', description: 'Designing experiences that delight and engage users' },
-              { title: 'Consulting', description: 'Helping businesses achieve their digital goals' }
+              { 
+                title: 'Web Design', 
+                description: 'Beautiful, responsive designs that capture your brand essence and engage your audience',
+                icon: Palette,
+                color: 'from-purple-500 to-pink-500'
+              },
+              { 
+                title: 'Web Development', 
+                description: 'Robust, scalable applications built with modern technologies and best practices',
+                icon: Code2,
+                color: 'from-blue-500 to-cyan-500'
+              },
+              { 
+                title: 'UI/UX Design', 
+                description: 'User-centered interfaces that provide intuitive and delightful experiences',
+                icon: Sparkles,
+                color: 'from-yellow-500 to-orange-500'
+              },
+              { 
+                title: 'Consulting', 
+                description: 'Strategic guidance to help your business thrive in the digital landscape',
+                icon: Rocket,
+                color: 'from-green-500 to-emerald-500'
+              }
             ].map((service, index) => (
               <div 
                 key={index}
-                className="glass p-4 rounded-lg text-left backdrop-blur-sm border border-white/0.3 transition-all duration-300"
+                className="glass p-6 rounded-2xl text-left backdrop-blur-md border border-primary-foreground/20 hover:border-primary/40 transition-all duration-300 hover-scale group"
               >
-                <h3 className="text-sm font-bold mb-2 text-primary-foreground">
+                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} p-3 mb-4 group-hover:scale-110 transition-transform`}>
+                  <service.icon className="w-full h-full text-white" />
+                </div>
+                <h3 className="text-lg font-bold mb-3 text-primary-foreground">
                   {service.title}
                 </h3>
-                <p className="text-muted-foreground text-xs leading-relaxed">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   {service.description}
                 </p>
               </div>
@@ -319,19 +179,26 @@ const Home = () => {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-8 px-4 text-center bg-background/0.3 backdrop-blur-sm">
-        <div className="max-w-md mx-auto">
-          <h3 className="text-base font-bold mb-3 text-primary-foreground">
-            Ready to Start Your Project?
-          </h3>
-          <Link to="/contact">
-            <Button 
-              size="lg"
-              className="w-full max-w-xs h-11 text-sm font-semibold bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
-            >
-              Get Started Today
-            </Button>
-          </Link>
+      <section className="py-20 px-4 text-center bg-background/30 backdrop-blur-md">
+        <div className="max-w-3xl mx-auto">
+          <div className="glass p-8 md:p-12 rounded-3xl backdrop-blur-md border border-primary-foreground/20">
+            <Sparkles className="w-16 h-16 mx-auto mb-6 text-primary animate-pulse" />
+            <h3 className="text-2xl md:text-3xl font-bold mb-4 text-primary-foreground">
+              Ready to Bring Your Vision to Life?
+            </h3>
+            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+              Let's collaborate on your next project and create something extraordinary together
+            </p>
+            <Link to="/contact">
+              <Button 
+                size="lg"
+                className="h-14 px-8 text-base font-semibold shadow-lg hover:shadow-2xl transition-all duration-300 hover-scale group"
+              >
+                Start Your Project Today
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
     </div>

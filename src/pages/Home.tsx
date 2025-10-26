@@ -12,7 +12,7 @@ const Home = () => {
           <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary-foreground">
             Creative Designer & Developer
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-primary-foreground/90">
+          <p className="text-xl md:text-2xl mb-8 text-primary-foreground/0">
             Crafting beautiful digital experiences with passion and precision
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
@@ -22,7 +22,7 @@ const Home = () => {
               </Button>
             </Link>
             <Link to="/contact">
-              <Button size="lg" variant="outline" className="bg-transparent text-primary-foreground border-primary-foreground/0 hover:bg-primary-foreground/0">
+              <Button size="lg" variant="outline" className="bg-transparent text-primary-foreground border-primary-foreground/0 hover:bg-primary-foreground/10">
                 Get in Touch
               </Button>
             </Link>

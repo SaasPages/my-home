@@ -298,7 +298,7 @@ const Home = () => {
           <div className="grid grid-cols-1 gap-3">
             {[
               { title: 'Web Design', description: 'Once you give me these details, I can craft something that truly represents you!​​​​​​​​​​​​​​​​' },
-              { title: 'Web Development', description: 'Building robust, scalable applications with modern tech' },
+              { title: 'Web Development', description: 'Is there something specific you’d like to explore or work on together?​​​​​​​​​​​​​​​​' },
               { title: 'UI/UX Design', description: 'Designing experiences that delight and engage users' },
               { title: 'Consulting', description: 'Helping businesses achieve their digital goals' }
             ].map((service, index) => (

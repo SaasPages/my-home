@@ -38,7 +38,7 @@ const LogoSlider: React.FC<{
             size="sm"
             variant="outline"
             onClick={() => setIsPaused(!isPaused)}
-            className="bg-transparent border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
+            className="flex bg-transparent border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
           >
             {isPaused ? (
               <Play className="w-4 h-4" />
@@ -60,14 +60,14 @@ const LogoSlider: React.FC<{
               >
                 −
               </Button>
-              <div className="px-3 py-1 rounded-md bg-primary-foreground/10 text-primary-foreground text-sm min-w-[60px] text-center">
+              <div className="flex px-3 py-1 rounded-md bg-primary-foreground/10 text-primary-foreground text-sm min-w-[60px] text-center">
                 {speed}s
               </div>
               <Button
                 size="sm"
                 variant="outline"
                 onClick={() => setSpeed((s) => Math.min(60, Math.round((s + 2) * 10) / 10))}
-                className="bg-transparent border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 h-8 w-8 p-0"
+                className="flex bg-transparent border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 h-8 w-8 p-0"
               >
                 +
               </Button>
@@ -261,7 +261,7 @@ const Home = () => {
       <VideoBackground overlayOpacity={0.14} />
 
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <section className="flex min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-4xl mx-auto animate-fade-in-up">
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-primary-foreground leading-tight">
@@ -282,7 +282,7 @@ const Home = () => {
               <Button 
                 size="lg" 
                 variant="secondary"
-                className="w-full sm:w-auto h-12 px-8 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                className="flex w-full sm:w-auto h-12 px-8 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 View Projects 
                 <ArrowRight className="ml-2 w-5 h-5" />
@@ -293,7 +293,7 @@ const Home = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full sm:w-auto h-12 px-8 text-base font-semibold bg-transparent text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/10 hover:border-primary-foreground/50 transition-all duration-300"
+                className="flex w-full sm:w-auto h-12 px-8 text-base font-semibold bg-transparent text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/10 hover:border-primary-foreground/50 transition-all duration-300"
               >
                 Get in Touch
               </Button>
@@ -331,7 +331,7 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-muted/20 backdrop-blur-sm">
+      <section className="flex py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-muted/20 backdrop-blur-sm">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 text-primary-foreground">
             What I Do

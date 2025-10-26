@@ -293,7 +293,7 @@ const Home = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="flex w-full sm:w-auto h-12 px-8 text-base font-semibold bg-transparent text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/10 hover:border-primary-foreground/50 transition-all duration-300"
+                className="flex w-full sm:w-auto h-12 px-8 text-base font-semibold bg-transparent text-primary-foreground border-primary-foreground/0.5 hover:bg-primary-foreground/0.5 hover:border-primary-foreground/0.5 transition-all duration-300"
               >
                 Get in Touch
               </Button>
@@ -316,7 +316,7 @@ const Home = () => {
             ].map((stat, index) => (
               <div 
                 key={index}
-                className="glass p-6 lg:p-8 rounded-2xl text-center backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300"
+                className="glass p-6 lg:p-8 rounded-2xl text-center backdrop-blur-sm border border-white/0.3 hover:border-white/0 transition-all duration-300"
               >
                 <div className="text-3xl lg:text-4xl font-bold text-primary mb-3">
                   {stat.number}
@@ -349,7 +349,7 @@ const Home = () => {
             ].map((service, index) => (
               <div 
                 key={index}
-                className="glass p-6 lg:p-8 rounded-2xl text-left backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:transform hover:-translate-y-1"
+                className="glass p-6 lg:p-8 rounded-2xl text-left backdrop-blur-sm border border-white/0.3 hover:border-white/0 transition-all duration-300 hover:transform hover:-translate-y-1"
               >
                 <h3 className="text-lg lg:text-xl font-bold mb-3 text-primary-foreground">
                   {service.title}

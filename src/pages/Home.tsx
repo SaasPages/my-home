@@ -49,7 +49,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-muted/30">
+      <section className="py-20 px-4 bg-muted/0.5">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">What I Do</h2>
           <p className="text-lg text-muted-foreground mb-12">

@@ -50,7 +50,7 @@ const Skills = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Skills & Expertise</h1>
           <div className="h-1 w-20 bg-primary mb-8"></div>
           <p className="text-lg text-muted-foreground mb-12 max-w-2xl">
-            I have expertise across the full stack of web development, with a particular focus on creating beautiful, performant user interfaces.
+            I have expertise across the full stack of web development, with a particular passion for creating beautiful, performant user interfaces.
           </p>
 
           <div className="grid md:grid-cols-2 gap-8">

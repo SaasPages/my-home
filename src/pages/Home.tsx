@@ -1,19 +1,95 @@
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import VideoBackground from '@/components/VideoBackground';
 
 const logos = [
-  { name: 'Upwork', src: 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/upwork.svg', href: 'https://www.upwork.com' },
-  { name: 'Firefox', src: 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/firefox.svg', href: 'https://www.mozilla.org/firefox/' },
-  { name: 'Apple', src: 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/apple.svg', href: 'https://www.apple.com' },
-  { name: 'Google', src: 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/google.svg', href: 'https://www.google.com' },
-  { name: 'Microsoft', src: 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/microsoft.svg', href: 'https://www.microsoft.com' },
-  { name: 'Facebook', src: 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/facebook.svg', href: 'https://www.facebook.com' },
-  { name: 'YouTube', src: 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/youtube.svg', href: 'https://www.youtube.com' },
+  { id: 'upwork', label: 'Upwork', short: 'U' },
+  { id: 'firefox', label: 'Firefox', short: 'F' },
+  { id: 'apple', label: 'Apple', short: '' },
+  { id: 'google', label: 'Google', short: 'G' },
+  { id: 'microsoft', label: 'Microsoft', short: 'M' },
+  { id: 'facebook', label: 'Facebook', short: 'f' },
+  { id: 'youtube', label: 'YouTube', short: '▶' },
 ];
 
-const Home = () => {
+type LogoSliderProps = {
+  /**
+   * Speed between slides.
+   * - If a number > 10 is passed it is interpreted as milliseconds (e.g. 500).
+   * - If a number <= 10 is passed it is interpreted as seconds and converted to ms (e.g. 0.5 -> 500ms).
+   */
+  speed?: number;
+};
+
+const LogoSlider: React.FC<LogoSliderProps> = ({ speed = 0.5 }) => {
+  const [index, setIndex] = useState(0);
+
+  // Accepts both seconds (e.g. 0.5) and ms (e.g. 500)
+  const intervalMs = speed <= 10 ? Math.max(100, speed * 1000) : Math.max(100, speed);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % logos.length);
+    }, intervalMs);
+    return () => clearInterval(id);
+  }, [intervalMs]);
+
+  return (
+    <div className="mt-12">
+      {/* Inline styles for the animated golden look */}
+      <style>{`
+        .logo-wrap { display: flex; align-items: center; justify-content: center; flex-wrap: nowrap; gap: 12px; }
+        .logo-item { text-align: center; width: 96px; }
+        .logo-circle {
+          width: 84px;
+          height: 84px;
+          border-radius: 9999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, rgba(255,215,0,0.14), rgba(255,215,0,0.04));
+          color: #d4af37; /* gold */
+          box-shadow: 0 6px 20px rgba(212,175,55,0.08), inset 0 -6px 12px rgba(0,0,0,0.08);
+          font-size: 34px;
+          transition: transform 300ms ease, box-shadow 300ms ease, opacity 300ms ease;
+          -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+        }
+        .logo-circle.gold-pulse { animation: goldenPulse 1.6s ease-in-out infinite; }
+        @keyframes goldenPulse {
+          0% { transform: scale(1); box-shadow: 0 6px 20px rgba(212,175,55,0.08); }
+          50% { transform: scale(1.06); box-shadow: 0 14px 34px rgba(212,175,55,0.18); }
+          100% { transform: scale(1); box-shadow: 0 6px 20px rgba(212,175,55,0.08); }
+        }
+        .logo-label { margin-top: 8px; font-weight: 600; color: rgba(212,175,55,0.95); font-size: 13px; }
+        .logo-fade { opacity: 0.28; transform: translateY(4px); }
+        .logo-fade.active { opacity: 1; transform: translateY(0); }
+      `}</style>
+
+      <div className="logo-wrap" role="list" aria-label="Trusted by">
+        {logos.map((l, i) => {
+          const active = i === index;
+          return (
+            <div key={l.id} className={`logo-item`} role="listitem" aria-hidden={!active}>
+              <div className={`logo-circle ${active ? 'gold-pulse' : ''} ${active ? 'logo-fade active' : 'logo-fade'}`}>
+                <span aria-hidden style={{ display: 'inline-block', lineHeight: 1 }}>
+                  {l.short}
+                </span>
+              </div>
+              <div className="logo-label" aria-hidden={!active}>
+                {l.label}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const Home: React.FC = () => {
   return (
     <div className="min-h-screen relative">
       <VideoBackground overlayOpacity={0.14} />
@@ -47,6 +123,10 @@ const Home = () => {
               </Button>
             </Link>
           </div>
+
+          {/* Logo slider: default speed is 0.5 seconds per slide.
+              If you want to pass milliseconds, use speed={500}. */}
+          <LogoSlider speed={0.5} />
         </div>
       </section>
 
@@ -94,62 +174,6 @@ const Home = () => {
               <p className="text-muted-foreground">Helping businesses achieve their digital goals</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Logo slider / marquee */}
-      <section className="py-12 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <h3 className="text-center text-lg font-semibold mb-6">Trusted by</h3>
-
-          <div className="relative overflow-hidden">
-            {/* Duplicate the list (logos.concat(logos)) so the animation loops seamlessly */}
-            <div className="marquee-track flex items-center space-x-8">
-              {logos.concat(logos).map((logo, idx) => (
-                <a
-                  key={`${logo.name}-${idx}`}
-                  href={logo.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center justify-center min-w-[140px] min-h-[60px] opacity-90 hover:opacity-100"
-                  aria-label={logo.name}
-                >
-                  <img
-                    src={logo.src}
-                    alt={logo.name}
-                    className="h-10 w-auto"
-                    onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                      // hide broken images so layout isn't affected
-                      const img = e.currentTarget;
-                      img.style.display = 'none';
-                    }}
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Inline CSS for marquee animation so no extra Tailwind config is required */}
-          <style>{`
-            .marquee-track {
-              display: flex;
-              gap: 2rem;
-              align-items: center;
-              /* Make the track twice as wide conceptually by duplicating content and moving -50% */
-              animation: marquee 24s linear infinite;
-            }
-            .marquee-track:hover {
-              animation-play-state: paused;
-            }
-
-            @keyframes marquee {
-              0% { transform: translateX(0%); }
-              100% { transform: translateX(-50%); }
-            }
-
-            /* Ensure anchor contents don't wrap */
-            .marquee-track a { white-space: nowrap; }
-          `}</style>
         </div>
       </section>
     </div>

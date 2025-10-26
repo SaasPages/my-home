@@ -250,7 +250,7 @@ const Home = () => {
     { id: 'upwork', label: 'Upwork', bg: 'linear-gradient(135deg, #1fb57a, #14a871)', fg: 'rgba(255,255,255,0.08)' },
     { id: 'firefox', label: 'Firefox', bg: 'linear-gradient(135deg, #ff9400, #e68500)', fg: 'rgba(255,255,255,0.08)' },
     { id: 'apple', label: 'Apple', bg: 'linear-gradient(135deg, #111827, #000000)', fg: 'rgba(255,255,255,0.08)' },
-    { id: 'google', label: 'Google', bg: 'linear-gradient(135deg, #ffffff, #f8fafc)', fg: '#f1f5f9' },
+    { id: 'google', label: 'Google', bg: 'linear-gradient(135deg, #CA3F16, #F3F4F5)', fg: '#f1f5f9' },
     { id: 'microsoft', label: 'Microsoft', bg: 'linear-gradient(135deg, #f3f4f6, #e5e7eb)', fg: '#374151' },
     { id: 'facebook', label: 'Facebook', bg: 'linear-gradient(135deg, #1877f2, #1669d6)', fg: 'rgba(255,255,255,0.08)' },
     { id: 'youtube', label: 'YouTube', bg: 'linear-gradient(135deg, #ff0000, #e60000)', fg: 'rgba(255,255,255,0.08)' },

@@ -1,85 +1,41 @@
-import { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
-const VideoBackground = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+// VideoBackground: place a crisp, full-bleed video behind page content.
+// Recommended: put a high-resolution MP4 in public/videos/hero.mp4 (1080p or 4k)
+// and a poster image in public/videos/hero-poster.jpg. Fallback source is provided.
+const VIDEO_SRC = '/videos/hero.mp4'; // Replace with your uploaded /public/videos/hero.mp4
+const FALLBACK_SRC = 'https://www.w3schools.com/html/mov_bbb.mp4'; // optional fallback
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+type Props = {
+  overlayOpacity?: number; // 0..1, default 0.15 for subtle darkening to keep text legible
+};
 
-    const attemptPlay = async () => {
-      try {
-        // Reset video to start
-        video.currentTime = 0;
-        video.muted = true;
-        video.playsInline = true;
-        
-        // Wait a bit for the video to be ready
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-        // Try to play
-        await video.play();
-        setIsLoaded(true);
-        console.log('Video background loaded successfully');
-      } catch (error) {
-        console.log('Video autoplay blocked, trying alternative approach:', error);
-        
-        // Try again after a short delay
-        setTimeout(async () => {
-          try {
-            await video.play();
-            setIsLoaded(true);
-          } catch (e) {
-            console.log('Video play failed:', e);
-          }
-        }, 500);
-      }
-    };
-
-    // Listen for when video data is loaded
-    const handleLoadedData = () => {
-      attemptPlay();
-    };
-
-    // Listen for user interaction to play video if autoplay fails
-    const handleInteraction = () => {
-      if (video && video.paused) {
-        video.play().catch(() => {});
-      }
-    };
-
-    video.addEventListener('loadeddata', handleLoadedData);
-    document.addEventListener('click', handleInteraction, { once: true });
-    document.addEventListener('touchstart', handleInteraction, { once: true });
-
-    // Also try to play immediately
-    if (video.readyState >= 2) {
-      attemptPlay();
-    }
-
-    return () => {
-      video.removeEventListener('loadeddata', handleLoadedData);
-      document.removeEventListener('click', handleInteraction);
-      document.removeEventListener('touchstart', handleInteraction);
-    };
-  }, []);
-
+const VideoBackground: React.FC<Props> = ({ overlayOpacity = 0.15 }) => {
+  // The wrapper is absolutely positioned with a negative z-index so it sits behind
+  // the page content. pointer-events-none ensures it doesn't intercept clicks.
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden">
+    <div className="absolute inset-0 -z-20 pointer-events-none">
       <video
-        ref={videoRef}
+        className="w-full h-full object-cover"
         autoPlay
-        loop
         muted
+        loop
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover opacity-30"
-        style={{ pointerEvents: 'none' }}
+        poster="/videos/hero-poster.jpg"
+        aria-hidden
       >
-        <source src="/background.mp4" type="video/mp4" />
+        <source src={VIDEO_SRC} type="video/mp4" />
+        <source src={FALLBACK_SRC} type="video/mp4" />
+        {/* If the browser cannot play the video, it will simply fall back to a poster or still page */}
       </video>
-      <div className="absolute inset-0 bg-background/60 backdrop-blur-sm"></div>
+
+      {/* Subtle overlay to improve contrast; inline style used so pages can pass a prop */}
+      <div
+        className="absolute inset-0 -z-10 bg-black"
+        style={{ opacity: overlayOpacity, pointerEvents: 'none' }}
+        aria-hidden
+      />
     </div>
   );
 };

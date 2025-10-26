@@ -7,12 +7,14 @@ const Gallery = () => {
     {
       title: 'Project Showcase 2024',
       thumbnail: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=450&fit=crop',
+      videoUrl: "https://www.youtube.com/embed/3IVCeyrFch4?si=uHKOuuDdVqu-szvc",
       duration: '3:45',
       category: 'Portfolio',
     },
     {
       title: 'Design Process Timelapse',
       thumbnail: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=450&fit=crop',
+      videoUrl: "https://www.youtube.com/embed/3IVCeyrFch4?si=uHKOuuDdVqu-szvc",
       duration: '5:12',
       category: 'Tutorial',
     },

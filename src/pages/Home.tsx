@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import VideoBackground from '@/components/VideoBackground';
-import TechStackSlider from '@/components/TechStackSlider';
+import LogosSlider from '@/components/LogosSlider';
 
 const Home = () => {
   return (
@@ -40,9 +40,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Tech stack slider (animated logos) */}
-      <TechStackSlider />
 
       {/* The rest of the page stays the same — VideoBackground covers the full page behind this content */}
       <section className="py-20 px-4">
@@ -90,6 +87,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Logos slider — marquee of client/partner logos */}
+      <LogosSlider />
     </div>
   );
 };

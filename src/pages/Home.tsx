@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Pause, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import VideoBackground from '@/components/VideoBackground';
+import { cn } from '@/lib/utils';
 
 type Logo = {
   id: string;
@@ -11,51 +12,66 @@ type Logo = {
   fg?: string;
 };
 
-const DEFAULT_SPEED = 18; // seconds for one full loop
+const DEFAULT_SPEED = 18;
 
 const LogoSlider: React.FC<{
   logos: Logo[];
   initialSpeed?: number;
 }> = ({ logos, initialSpeed = DEFAULT_SPEED }) => {
   const [speed, setSpeed] = useState<number>(initialSpeed);
+  const [isPaused, setIsPaused] = useState(false);
 
   const doubled = useMemo(() => {
-    // duplicate the array so the animation can loop seamlessly
     return [...logos, ...logos];
   }, [logos]);
 
   return (
-    <div className="mt-16">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            Trusted by Industry Leaders
-          </h3>
-          <p className="text-sm text-gray-400 mt-2">Companies I've collaborated with</p>
-        </div>
+    <div className="mt-10 lg:mt-16">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-primary-foreground">
+          Trusted by Industry Leaders
+        </h3>
 
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground mr-2">Scroll Speed</span>
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              variant="outline"
-              className="border-gray-600 hover:bg-gray-800"
-              onClick={() => setSpeed((s) => Math.max(4, Math.round((s - 2) * 10) / 10))}
-            >
-              −
-            </Button>
-            <div className="px-3 py-2 rounded-md bg-gray-800/50 text-sm text-gray-300 min-w-[60px] text-center">
-              {speed}s
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          {/* Play/Pause Controls */}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setIsPaused(!isPaused)}
+            className="bg-transparent border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
+          >
+            {isPaused ? (
+              <Play className="w-4 h-4" />
+            ) : (
+              <Pause className="w-4 h-4" />
+            )}
+          </Button>
+
+          <div className="flex items-center gap-2 flex-1 sm:flex-initial">
+            <span className="text-sm text-primary-foreground/80 whitespace-nowrap">
+              Speed
+            </span>
+            <div className="flex gap-1">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setSpeed((s) => Math.max(4, Math.round((s - 2) * 10) / 10))}
+                className="bg-transparent border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 h-8 w-8 p-0"
+              >
+                −
+              </Button>
+              <div className="px-3 py-1 rounded-md bg-primary-foreground/10 text-primary-foreground text-sm min-w-[60px] text-center">
+                {speed}s
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setSpeed((s) => Math.min(60, Math.round((s + 2) * 10) / 10))}
+                className="bg-transparent border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 h-8 w-8 p-0"
+              >
+                +
+              </Button>
             </div>
-            <Button
-              size="sm"
-              variant="outline"
-              className="border-gray-600 hover:bg-gray-800"
-              onClick={() => setSpeed((s) => Math.min(60, Math.round((s + 2) * 10) / 10))}
-            >
-              +
-            </Button>
           </div>
         </div>
       </div>
@@ -63,10 +79,8 @@ const LogoSlider: React.FC<{
       <div
         className="relative overflow-hidden"
         aria-hidden={false}
-        // CSS variable used by the keyframes to control speed
         style={{ ['--slider-speed' as any]: `${speed}s` }}
       >
-        {/* Inline styles for the slider animation & shimmer effect */}
         <style>{`
           @keyframes scroll-left {
             0% { transform: translateX(0); }
@@ -75,21 +89,18 @@ const LogoSlider: React.FC<{
 
           .logo-track {
             display: inline-flex;
-            gap: 1.5rem;
+            gap: 1rem;
             align-items: center;
-            /* animate translateX to -50% (because we duplicated items) */
             animation: scroll-left var(--slider-speed) linear infinite;
             will-change: transform;
           }
 
-          /* pause animation on hover to allow the user to inspect logos */
-          .logo-track:hover {
+          .logo-track.paused {
             animation-play-state: paused;
           }
 
-          /* Each logo card */
           .logo-card {
-            min-width: 180px;
+            min-width: 140px;
             height: 80px;
             display: flex;
             align-items: center;
@@ -97,20 +108,18 @@ const LogoSlider: React.FC<{
             border-radius: 16px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
           }
 
           .logo-card:hover {
             transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
           }
 
-          /* golden shimmer overlay */
           .logo-card::after {
             content: "";
             position: absolute;
@@ -118,12 +127,12 @@ const LogoSlider: React.FC<{
             left: -40%;
             width: 60%;
             height: 180%;
-            background: linear-gradient(90deg, rgba(255,215,0,0) 0%, rgba(255,215,0,0.45) 50%, rgba(255,215,0,0) 100%);
+            background: linear-gradient(90deg, rgba(255,215,0,0) 0%, rgba(255,215,0,0.35) 50%, rgba(255,215,0,0) 100%);
             transform: rotate(-25deg);
-            animation: shimmer 2.2s linear infinite;
+            animation: shimmer 3s linear infinite;
             pointer-events: none;
             mix-blend-mode: overlay;
-            opacity: 0.9;
+            opacity: 0.8;
           }
 
           @keyframes shimmer {
@@ -133,47 +142,78 @@ const LogoSlider: React.FC<{
             100% { transform: translateX(220%) rotate(-25deg); opacity: 0; }
           }
 
-          /* Make sure logos are readable on their brand backgrounds */
           .logo-inner {
             z-index: 2;
-            display:flex;
-            align-items:center;
-            gap:1rem;
-            padding: 0 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0 1rem;
           }
 
           .logo-mark {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-weight:700;
-            font-size:15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
             color: white;
-            flex-shrink:0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15) inset;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) inset;
             backdrop-filter: blur(4px);
           }
 
-          /* subdued label for brand name */
           .logo-label {
-            color: rgba(255,255,255,0.95);
+            color: rgba(255, 255, 255, 0.95);
             font-weight: 600;
-            font-size: 15px;
+            font-size: 0.875rem;
             white-space: nowrap;
           }
 
-          /* small screens: allow smaller logo widths */
+          /* Mobile Styles */
           @media (max-width: 640px) {
-            .logo-card { min-width: 140px; height: 65px; }
-            .logo-mark { width: 40px; height: 40px; font-size:14px; border-radius:10px; }
-            .logo-label { font-size: 14px; }
+            .logo-card { 
+              min-width: 120px; 
+              height: 70px; 
+              border-radius: 12px;
+            }
+            .logo-mark { 
+              width: 36px; 
+              height: 36px; 
+              font-size: 12px; 
+              border-radius: 10px; 
+            }
+            .logo-label {
+              font-size: 0.75rem;
+            }
+            .logo-inner {
+              gap: 0.5rem;
+              padding: 0 0.75rem;
+            }
+          }
+
+          /* Tablet Styles */
+          @media (min-width: 641px) and (max-width: 1024px) {
+            .logo-card { 
+              min-width: 150px; 
+              height: 85px; 
+            }
+          }
+
+          /* Reduced motion support */
+          @media (prefers-reduced-motion: reduce) {
+            .logo-track {
+              animation: none;
+            }
+            .logo-card::after {
+              animation: none;
+            }
           }
         `}</style>
 
-        <div className="logo-track" style={{ whiteSpace: 'nowrap' }}>
+        <div className={cn("logo-track", isPaused && "paused")}>
           {doubled.map((l, idx) => (
             <div
               key={`${l.id}-${idx}`}
@@ -188,7 +228,6 @@ const LogoSlider: React.FC<{
                   className="logo-mark"
                   style={{ background: (l.fg ? l.fg : 'rgba(0,0,0,0.12)') }}
                 >
-                  {/* use initials as a lightweight mark */}
                   {l.label
                     .split(' ')
                     .map((p) => p[0])
@@ -207,133 +246,119 @@ const LogoSlider: React.FC<{
 };
 
 const Home = () => {
-  // brand background colors (kept accessible & visually distinct)
   const logos: Logo[] = [
-    { id: 'upwork', label: 'Upwork', bg: '#1fb57a', fg: 'rgba(255,255,255,0.06)' },
-    { id: 'firefox', label: 'Firefox', bg: '#ff9400', fg: 'rgba(255,255,255,0.06)' },
-    { id: 'apple', label: 'Apple', bg: '#111827', fg: 'rgba(255,255,255,0.06)' },
-    { id: 'google', label: 'Google', bg: '#ffffff', fg: '#f3f4f6' },
-    { id: 'microsoft', label: 'Microsoft', bg: '#f3f4f6', fg: '#111827' },
-    { id: 'facebook', label: 'Facebook', bg: '#1877f2', fg: 'rgba(255,255,255,0.06)' },
-    { id: 'youtube', label: 'YouTube', bg: '#ff0000', fg: 'rgba(255,255,255,0.06)' },
+    { id: 'upwork', label: 'Upwork', bg: 'linear-gradient(135deg, #1fb57a, #14a871)', fg: 'rgba(255,255,255,0.08)' },
+    { id: 'firefox', label: 'Firefox', bg: 'linear-gradient(135deg, #ff9400, #e68500)', fg: 'rgba(255,255,255,0.08)' },
+    { id: 'apple', label: 'Apple', bg: 'linear-gradient(135deg, #111827, #000000)', fg: 'rgba(255,255,255,0.08)' },
+    { id: 'google', label: 'Google', bg: 'linear-gradient(135deg, #ffffff, #f8fafc)', fg: '#f1f5f9' },
+    { id: 'microsoft', label: 'Microsoft', bg: 'linear-gradient(135deg, #f3f4f6, #e5e7eb)', fg: '#374151' },
+    { id: 'facebook', label: 'Facebook', bg: 'linear-gradient(135deg, #1877f2, #1669d6)', fg: 'rgba(255,255,255,0.08)' },
+    { id: 'youtube', label: 'YouTube', bg: 'linear-gradient(135deg, #ff0000, #e60000)', fg: 'rgba(255,255,255,0.08)' },
   ];
 
   return (
     <div className="min-h-screen relative">
       <VideoBackground overlayOpacity={0.14} />
 
-      {/* Hero content */}
-      <section className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center max-w-6xl mx-auto animate-fade-in-up">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8">
-            <Sparkles className="w-4 h-4 text-yellow-400" />
-            <span className="text-sm font-medium text-white">Now available for new projects</span>
-          </div>
-
-          <h1 className="text-6xl md:text-8xl font-black mb-6 text-white leading-tight">
-            Digital
-            <span className="block bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-              Innovator
+      {/* Hero Section */}
+      <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-4xl mx-auto animate-fade-in-up">
+          {/* Main Heading */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-primary-foreground leading-tight">
+            Creative Designer
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+              & Developer
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl mb-10 text-gray-200 max-w-3xl mx-auto leading-relaxed">
-            Transforming ideas into exceptional digital experiences through cutting-edge design 
-            and engineering excellence
+          {/* Subtitle */}
+          <p className="text-lg sm:text-xl md:text-2xl mb-8 lg:mb-12 text-primary-foreground/90 max-w-2xl mx-auto leading-relaxed">
+            Crafting beautiful digital experiences with passion and precision across all platforms
           </p>
 
-          <div className="flex flex-wrap gap-4 justify-center mb-16">
-            <Link to="/projects">
-              <Button size="lg" className="bg-white text-black hover:bg-gray-100 px-8 py-3 h-auto text-lg font-semibold rounded-xl">
-                Explore My Work 
-                <ArrowRight className="ml-3 w-5 h-5" />
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 lg:mb-16">
+            <Link to="/projects" className="flex-1 sm:flex-initial">
+              <Button 
+                size="lg" 
+                variant="secondary"
+                className="w-full sm:w-auto h-12 px-8 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                View Projects 
+                <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
 
-            <Link to="/contact">
+            <Link to="/contact" className="flex-1 sm:flex-initial">
               <Button
                 size="lg"
                 variant="outline"
-                className="bg-transparent text-white border-white/30 hover:bg-white/10 hover:border-white/50 px-8 py-3 h-auto text-lg font-semibold rounded-xl backdrop-blur-sm"
+                className="w-full sm:w-auto h-12 px-8 text-base font-semibold bg-transparent text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/10 hover:border-primary-foreground/50 transition-all duration-300"
               >
-                Start a Project
+                Get in Touch
               </Button>
             </Link>
           </div>
 
-          {/* Logo slider placed beneath hero CTAs */}
+          {/* Logo Slider */}
           <LogoSlider logos={logos} initialSpeed={DEFAULT_SPEED} />
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-24 px-4">
+      <section className="py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="glass p-10 rounded-2xl text-center group hover:scale-105 transition-transform duration-300">
-              <div className="text-5xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-3">75+</div>
-              <p className="text-lg text-gray-300 font-medium">Projects Delivered</p>
-            </div>
-            <div className="glass p-10 rounded-2xl text-center group hover:scale-105 transition-transform duration-300">
-              <div className="text-5xl font-black bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent mb-3">40+</div>
-              <p className="text-lg text-gray-300 font-medium">Satisfied Clients</p>
-            </div>
-            <div className="glass p-10 rounded-2xl text-center group hover:scale-105 transition-transform duration-300">
-              <div className="text-5xl font-black bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-3">6+</div>
-              <p className="text-lg text-gray-300 font-medium">Years Excellence</p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {[
+              { number: '50+', label: 'Projects Completed' },
+              { number: '30+', label: 'Happy Clients' },
+              { number: '5+', label: 'Years Experience' }
+            ].map((stat, index) => (
+              <div 
+                key={index}
+                className="glass p-6 lg:p-8 rounded-2xl text-center backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300"
+              >
+                <div className="text-3xl lg:text-4xl font-bold text-primary mb-3">
+                  {stat.number}
+                </div>
+                <p className="text-muted-foreground text-sm lg:text-base">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section className="py-24 px-4 bg-black/30 backdrop-blur-sm">
-        <div className="container mx-auto max-w-5xl text-center">
-          <h2 className="text-4xl md:text-5xl font-black mb-6 text-white">
-            Crafting Digital Excellence
+      <section className="py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-muted/20 backdrop-blur-sm">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 text-primary-foreground">
+            What I Do
           </h2>
-          <p className="text-xl text-gray-300 mb-16 max-w-3xl mx-auto leading-relaxed">
-            I bridge the gap between stunning visual design and robust technical implementation 
-            to create products that users love and businesses rely on.
+          <p className="text-base sm:text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
+            I specialize in creating modern web experiences that combine stunning design with powerful functionality across all devices
           </p>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="glass p-8 rounded-2xl text-left group hover:scale-105 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center mb-6">
-                <span className="text-white font-bold text-lg">WD</span>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+            {[
+              { title: 'Web Design', description: 'Creating beautiful, intuitive interfaces that users love' },
+              { title: 'Web Development', description: 'Building robust, scalable applications with modern technologies' },
+              { title: 'UI/UX Design', description: 'Designing experiences that delight and engage users' },
+              { title: 'Consulting', description: 'Helping businesses achieve their digital goals' }
+            ].map((service, index) => (
+              <div 
+                key={index}
+                className="glass p-6 lg:p-8 rounded-2xl text-left backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:transform hover:-translate-y-1"
+              >
+                <h3 className="text-lg lg:text-xl font-bold mb-3 text-primary-foreground">
+                  {service.title}
+                </h3>
+                <p className="text-muted-foreground text-sm lg:text-base">
+                  {service.description}
+                </p>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Web Design</h3>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                Creating beautiful, intuitive interfaces that users love to interact with
-              </p>
-            </div>
-            <div className="glass p-8 rounded-2xl text-left group hover:scale-105 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mb-6">
-                <span className="text-white font-bold text-lg">WD</span>
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Web Development</h3>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                Building robust, scalable applications with modern technologies and best practices
-              </p>
-            </div>
-            <div className="glass p-8 rounded-2xl text-left group hover:scale-105 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center mb-6">
-                <span className="text-white font-bold text-lg">UX</span>
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4">UI/UX Design</h3>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                Designing experiences that delight users and drive meaningful engagement
-              </p>
-            </div>
-            <div className="glass p-8 rounded-2xl text-left group hover:scale-105 transition-all duration-300">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center mb-6">
-                <span className="text-white font-bold text-lg">CS</span>
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Digital Strategy</h3>
-              <p className="text-gray-300 text-lg leading-relaxed">
-                Helping businesses achieve their digital transformation goals with data-driven insights
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>

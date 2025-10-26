@@ -41,6 +41,9 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Logos slider section (brand logos marquee) */}
+      <LogosSlider />
+
       {/* The rest of the page stays the same — VideoBackground covers the full page behind this content */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
@@ -87,9 +90,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Logos slider — marquee of client/partner logos */}
-      <LogosSlider />
     </div>
   );
 };

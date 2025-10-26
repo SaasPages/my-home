@@ -227,7 +227,7 @@ const Home = () => {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm mb-6 text-primary-foreground/0 leading-relaxed px-2">
+          <p className="text-sm mb-6 text-primary-foreground/90 leading-relaxed px-2">
             Crafting beautiful digital experiences with passion and precision across all platforms
           </p>
 
@@ -248,7 +248,7 @@ const Home = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="w-full h-11 text-sm font-semibold bg-transparent text-primary-foreground border-primary-foreground/0.3 hover:bg-primary-foreground/0.2 transition-all duration-300"
+                className="w-full h-11 text-sm font-semibold bg-transparent text-primary-foreground border-primary-foreground/40 hover:bg-primary-foreground/10 transition-all duration-300"
               >
                 Get in Touch
               </Button>
@@ -271,7 +271,7 @@ const Home = () => {
             ].map((stat, index) => (
               <div 
                 key={index}
-                className="glass p-4 rounded-lg text-center backdrop-blur-sm border border-white/0.2 transition-all duration-300"
+                className="glass p-4 rounded-lg text-center backdrop-blur-sm border border-white/0.3 transition-all duration-300"
               >
                 <div className="text-xl font-bold text-primary mb-1">
                   {stat.number}

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import VideoBackground from '@/components/VideoBackground';
 
@@ -25,26 +25,33 @@ const LogoSlider: React.FC<{
   }, [logos]);
 
   return (
-    <div className="mt-10">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-semibold">Our Brand Partners</h3>
+    <div className="mt-16">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            Trusted by Industry Leaders
+          </h3>
+          <p className="text-sm text-gray-400 mt-2">Companies I've collaborated with</p>
+        </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground mr-2">Speed</span>
+          <span className="text-sm text-muted-foreground mr-2">Scroll Speed</span>
           <div className="flex gap-2">
             <Button
               size="sm"
               variant="outline"
+              className="border-gray-600 hover:bg-gray-800"
               onClick={() => setSpeed((s) => Math.max(4, Math.round((s - 2) * 10) / 10))}
             >
               −
             </Button>
-            <div className="px-3 py-2 rounded-md bg-muted/20 text-sm">
+            <div className="px-3 py-2 rounded-md bg-gray-800/50 text-sm text-gray-300 min-w-[60px] text-center">
               {speed}s
             </div>
             <Button
               size="sm"
               variant="outline"
+              className="border-gray-600 hover:bg-gray-800"
               onClick={() => setSpeed((s) => Math.min(60, Math.round((s + 2) * 10) / 10))}
             >
               +
@@ -68,7 +75,7 @@ const LogoSlider: React.FC<{
 
           .logo-track {
             display: inline-flex;
-            gap: 1rem;
+            gap: 1.5rem;
             align-items: center;
             /* animate translateX to -50% (because we duplicated items) */
             animation: scroll-left var(--slider-speed) linear infinite;
@@ -82,22 +89,25 @@ const LogoSlider: React.FC<{
 
           /* Each logo card */
           .logo-card {
-            min-width: 160px;
-            height: 72px;
+            min-width: 180px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
+            border-radius: 16px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 6px 18px rgba(15,23,42,0.08);
-            transition: transform .2s ease, box-shadow .2s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
           }
 
           .logo-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 28px rgba(15,23,42,0.12);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: rgba(255,255,255,0.2);
           }
 
           /* golden shimmer overlay */
@@ -128,34 +138,38 @@ const LogoSlider: React.FC<{
             z-index: 2;
             display:flex;
             align-items:center;
-            gap:0.75rem;
-            padding: 0 1rem;
+            gap:1rem;
+            padding: 0 1.25rem;
           }
 
           .logo-mark {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display:flex;
             align-items:center;
             justify-content:center;
             font-weight:700;
-            font-size:14px;
+            font-size:15px;
             color: white;
             flex-shrink:0;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08) inset;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15) inset;
+            backdrop-filter: blur(4px);
           }
 
           /* subdued label for brand name */
           .logo-label {
             color: rgba(255,255,255,0.95);
             font-weight: 600;
+            font-size: 15px;
+            white-space: nowrap;
           }
 
           /* small screens: allow smaller logo widths */
           @media (max-width: 640px) {
-            .logo-card { min-width: 130px; height: 60px; }
-            .logo-mark { width: 36px; height: 36px; font-size:13px; border-radius:8px; }
+            .logo-card { min-width: 140px; height: 65px; }
+            .logo-mark { width: 40px; height: 40px; font-size:14px; border-radius:10px; }
+            .logo-label { font-size: 14px; }
           }
         `}</style>
 
@@ -172,7 +186,7 @@ const LogoSlider: React.FC<{
               <div className="logo-inner">
                 <div
                   className="logo-mark"
-                  style={{ background: (l.fg ? l.fg : 'rgba(0,0,0,0.08)') }}
+                  style={{ background: (l.fg ? l.fg : 'rgba(0,0,0,0.12)') }}
                 >
                   {/* use initials as a lightweight mark */}
                   {l.label
@@ -208,22 +222,32 @@ const Home = () => {
     <div className="min-h-screen relative">
       <VideoBackground overlayOpacity={0.14} />
 
-      {/* Hero content — removed the heavy gradient-bg wrapper so the video is visible */}
+      {/* Hero content */}
       <section className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center max-w-4xl mx-auto animate-fade-in-up">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary-foreground">
-            Creative Designer & Developer
+        <div className="text-center max-w-6xl mx-auto animate-fade-in-up">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8">
+            <Sparkles className="w-4 h-4 text-yellow-400" />
+            <span className="text-sm font-medium text-white">Now available for new projects</span>
+          </div>
+
+          <h1 className="text-6xl md:text-8xl font-black mb-6 text-white leading-tight">
+            Digital
+            <span className="block bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+              Innovator
+            </span>
           </h1>
 
-          {/* fixed subtitle opacity (previously /0 made it invisible) */}
-          <p className="text-xl md:text-2xl mb-8 text-primary-foreground/90">
-            Crafting beautiful digital experiences with passion and precision
+          <p className="text-xl md:text-2xl mb-10 text-gray-200 max-w-3xl mx-auto leading-relaxed">
+            Transforming ideas into exceptional digital experiences through cutting-edge design 
+            and engineering excellence
           </p>
 
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-4 justify-center mb-16">
             <Link to="/projects">
-              <Button size="lg" variant="secondary">
-                View Projects <ArrowRight className="ml-2 w-5 h-5" />
+              <Button size="lg" className="bg-white text-black hover:bg-gray-100 px-8 py-3 h-auto text-lg font-semibold rounded-xl">
+                Explore My Work 
+                <ArrowRight className="ml-3 w-5 h-5" />
               </Button>
             </Link>
 
@@ -231,9 +255,9 @@ const Home = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="bg-transparent text-primary-foreground border-primary-foreground/0 hover:bg-primary-foreground/10"
+                className="bg-transparent text-white border-white/30 hover:bg-white/10 hover:border-white/50 px-8 py-3 h-auto text-lg font-semibold rounded-xl backdrop-blur-sm"
               >
-                Get in Touch
+                Start a Project
               </Button>
             </Link>
           </div>
@@ -243,48 +267,72 @@ const Home = () => {
         </div>
       </section>
 
-      {/* The rest of the page stays the same — VideoBackground covers the full page behind this content */}
-      <section className="py-20 px-4">
+      {/* Stats Section */}
+      <section className="py-24 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="glass p-8 rounded-lg text-center">
-              <div className="text-4xl font-bold text-primary mb-2">50+</div>
-              <p className="text-muted-foreground">Projects Completed</p>
+            <div className="glass p-10 rounded-2xl text-center group hover:scale-105 transition-transform duration-300">
+              <div className="text-5xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-3">75+</div>
+              <p className="text-lg text-gray-300 font-medium">Projects Delivered</p>
             </div>
-            <div className="glass p-8 rounded-lg text-center">
-              <div className="text-4xl font-bold text-primary mb-2">30+</div>
-              <p className="text-muted-foreground">Happy Clients</p>
+            <div className="glass p-10 rounded-2xl text-center group hover:scale-105 transition-transform duration-300">
+              <div className="text-5xl font-black bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent mb-3">40+</div>
+              <p className="text-lg text-gray-300 font-medium">Satisfied Clients</p>
             </div>
-            <div className="glass p-8 rounded-lg text-center">
-              <div className="text-4xl font-bold text-primary mb-2">5+</div>
-              <p className="text-muted-foreground">Years Experience</p>
+            <div className="glass p-10 rounded-2xl text-center group hover:scale-105 transition-transform duration-300">
+              <div className="text-5xl font-black bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-3">6+</div>
+              <p className="text-lg text-gray-300 font-medium">Years Excellence</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-20 px-4 bg-muted/0.5">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">What I Do</h2>
-          <p className="text-lg text-muted-foreground mb-12">
-            I specialize in creating modern web experiences that combine stunning design with powerful functionality
+      {/* Services Section */}
+      <section className="py-24 px-4 bg-black/30 backdrop-blur-sm">
+        <div className="container mx-auto max-w-5xl text-center">
+          <h2 className="text-4xl md:text-5xl font-black mb-6 text-white">
+            Crafting Digital Excellence
+          </h2>
+          <p className="text-xl text-gray-300 mb-16 max-w-3xl mx-auto leading-relaxed">
+            I bridge the gap between stunning visual design and robust technical implementation 
+            to create products that users love and businesses rely on.
           </p>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="glass p-6 rounded-lg text-left">
-              <h3 className="text-xl font-bold mb-3">Web Design</h3>
-              <p className="text-muted-foreground">Creating beautiful, intuitive interfaces that users love</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="glass p-8 rounded-2xl text-left group hover:scale-105 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center mb-6">
+                <span className="text-white font-bold text-lg">WD</span>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Web Design</h3>
+              <p className="text-gray-300 text-lg leading-relaxed">
+                Creating beautiful, intuitive interfaces that users love to interact with
+              </p>
             </div>
-            <div className="glass p-6 rounded-lg text-left">
-              <h3 className="text-xl font-bold mb-3">Web Development</h3>
-              <p className="text-muted-foreground">Building robust, scalable applications with modern technologies</p>
+            <div className="glass p-8 rounded-2xl text-left group hover:scale-105 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mb-6">
+                <span className="text-white font-bold text-lg">WD</span>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Web Development</h3>
+              <p className="text-gray-300 text-lg leading-relaxed">
+                Building robust, scalable applications with modern technologies and best practices
+              </p>
             </div>
-            <div className="glass p-6 rounded-lg text-left">
-              <h3 className="text-xl font-bold mb-3">UI/UX Design</h3>
-              <p className="text-muted-foreground">Designing experiences that delight and engage users</p>
+            <div className="glass p-8 rounded-2xl text-left group hover:scale-105 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 flex items-center justify-center mb-6">
+                <span className="text-white font-bold text-lg">UX</span>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">UI/UX Design</h3>
+              <p className="text-gray-300 text-lg leading-relaxed">
+                Designing experiences that delight users and drive meaningful engagement
+              </p>
             </div>
-            <div className="glass p-6 rounded-lg text-left">
-              <h3 className="text-xl font-bold mb-3">Consulting</h3>
-              <p className="text-muted-foreground">Helping businesses achieve their digital goals</p>
+            <div className="glass p-8 rounded-2xl text-left group hover:scale-105 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center mb-6">
+                <span className="text-white font-bold text-lg">CS</span>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Digital Strategy</h3>
+              <p className="text-gray-300 text-lg leading-relaxed">
+                Helping businesses achieve their digital transformation goals with data-driven insights
+              </p>
             </div>
           </div>
         </div>

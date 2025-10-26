@@ -1,95 +1,209 @@
-import React, { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import VideoBackground from '@/components/VideoBackground';
 
-const logos = [
-  { id: 'upwork', label: 'Upwork', short: 'U' },
-  { id: 'firefox', label: 'Firefox', short: 'F' },
-  { id: 'apple', label: 'Apple', short: '' },
-  { id: 'google', label: 'Google', short: 'G' },
-  { id: 'microsoft', label: 'Microsoft', short: 'M' },
-  { id: 'facebook', label: 'Facebook', short: 'f' },
-  { id: 'youtube', label: 'YouTube', short: '▶' },
-];
-
-type LogoSliderProps = {
-  /**
-   * Speed between slides.
-   * - If a number > 10 is passed it is interpreted as milliseconds (e.g. 500).
-   * - If a number <= 10 is passed it is interpreted as seconds and converted to ms (e.g. 0.5 -> 500ms).
-   */
-  speed?: number;
+type Logo = {
+  id: string;
+  label: string;
+  bg: string;
+  fg?: string;
 };
 
-const LogoSlider: React.FC<LogoSliderProps> = ({ speed = 0.5 }) => {
-  const [index, setIndex] = useState(0);
+const DEFAULT_SPEED = 18; // seconds for one full loop
 
-  // Accepts both seconds (e.g. 0.5) and ms (e.g. 500)
-  const intervalMs = speed <= 10 ? Math.max(100, speed * 1000) : Math.max(100, speed);
+const LogoSlider: React.FC<{
+  logos: Logo[];
+  initialSpeed?: number;
+}> = ({ logos, initialSpeed = DEFAULT_SPEED }) => {
+  const [speed, setSpeed] = useState<number>(initialSpeed);
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      setIndex((i) => (i + 1) % logos.length);
-    }, intervalMs);
-    return () => clearInterval(id);
-  }, [intervalMs]);
+  const doubled = useMemo(() => {
+    // duplicate the array so the animation can loop seamlessly
+    return [...logos, ...logos];
+  }, [logos]);
 
   return (
-    <div className="mt-12">
-      {/* Inline styles for the animated golden look */}
-      <style>{`
-        .logo-wrap { display: flex; align-items: center; justify-content: center; flex-wrap: nowrap; gap: 12px; }
-        .logo-item { text-align: center; width: 96px; }
-        .logo-circle {
-          width: 84px;
-          height: 84px;
-          border-radius: 9999px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          background: linear-gradient(135deg, rgba(255,215,0,0.14), rgba(255,215,0,0.04));
-          color: #d4af37; /* gold */
-          box-shadow: 0 6px 20px rgba(212,175,55,0.08), inset 0 -6px 12px rgba(0,0,0,0.08);
-          font-size: 34px;
-          transition: transform 300ms ease, box-shadow 300ms ease, opacity 300ms ease;
-          -webkit-backdrop-filter: blur(6px);
-          backdrop-filter: blur(6px);
-        }
-        .logo-circle.gold-pulse { animation: goldenPulse 1.6s ease-in-out infinite; }
-        @keyframes goldenPulse {
-          0% { transform: scale(1); box-shadow: 0 6px 20px rgba(212,175,55,0.08); }
-          50% { transform: scale(1.06); box-shadow: 0 14px 34px rgba(212,175,55,0.18); }
-          100% { transform: scale(1); box-shadow: 0 6px 20px rgba(212,175,55,0.08); }
-        }
-        .logo-label { margin-top: 8px; font-weight: 600; color: rgba(212,175,55,0.95); font-size: 13px; }
-        .logo-fade { opacity: 0.28; transform: translateY(4px); }
-        .logo-fade.active { opacity: 1; transform: translateY(0); }
-      `}</style>
+    <div className="mt-10">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-xl font-semibold">Our Brand Partners</h3>
 
-      <div className="logo-wrap" role="list" aria-label="Trusted by">
-        {logos.map((l, i) => {
-          const active = i === index;
-          return (
-            <div key={l.id} className={`logo-item`} role="listitem" aria-hidden={!active}>
-              <div className={`logo-circle ${active ? 'gold-pulse' : ''} ${active ? 'logo-fade active' : 'logo-fade'}`}>
-                <span aria-hidden style={{ display: 'inline-block', lineHeight: 1 }}>
-                  {l.short}
-                </span>
-              </div>
-              <div className="logo-label" aria-hidden={!active}>
-                {l.label}
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground mr-2">Speed</span>
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setSpeed((s) => Math.max(4, Math.round((s - 2) * 10) / 10))}
+            >
+              −
+            </Button>
+            <div className="px-3 py-2 rounded-md bg-muted/20 text-sm">
+              {speed}s
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setSpeed((s) => Math.min(60, Math.round((s + 2) * 10) / 10))}
+            >
+              +
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="relative overflow-hidden"
+        aria-hidden={false}
+        // CSS variable used by the keyframes to control speed
+        style={{ ['--slider-speed' as any]: `${speed}s` }}
+      >
+        {/* Inline styles for the slider animation & shimmer effect */}
+        <style>{`
+          @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+
+          .logo-track {
+            display: inline-flex;
+            gap: 1rem;
+            align-items: center;
+            /* animate translateX to -50% (because we duplicated items) */
+            animation: scroll-left var(--slider-speed) linear infinite;
+            will-change: transform;
+          }
+
+          /* pause animation on hover to allow the user to inspect logos */
+          .logo-track:hover {
+            animation-play-state: paused;
+          }
+
+          /* Each logo card */
+          .logo-card {
+            min-width: 160px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+            transition: transform .2s ease, box-shadow .2s ease;
+            flex-shrink: 0;
+          }
+
+          .logo-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(15,23,42,0.12);
+          }
+
+          /* golden shimmer overlay */
+          .logo-card::after {
+            content: "";
+            position: absolute;
+            top: -40%;
+            left: -40%;
+            width: 60%;
+            height: 180%;
+            background: linear-gradient(90deg, rgba(255,215,0,0) 0%, rgba(255,215,0,0.45) 50%, rgba(255,215,0,0) 100%);
+            transform: rotate(-25deg);
+            animation: shimmer 2.2s linear infinite;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+            opacity: 0.9;
+          }
+
+          @keyframes shimmer {
+            0% { transform: translateX(-220%) rotate(-25deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            50% { transform: translateX(120%) rotate(-25deg); opacity: 0.7; }
+            100% { transform: translateX(220%) rotate(-25deg); opacity: 0; }
+          }
+
+          /* Make sure logos are readable on their brand backgrounds */
+          .logo-inner {
+            z-index: 2;
+            display:flex;
+            align-items:center;
+            gap:0.75rem;
+            padding: 0 1rem;
+          }
+
+          .logo-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:700;
+            font-size:14px;
+            color: white;
+            flex-shrink:0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08) inset;
+          }
+
+          /* subdued label for brand name */
+          .logo-label {
+            color: rgba(255,255,255,0.95);
+            font-weight: 600;
+          }
+
+          /* small screens: allow smaller logo widths */
+          @media (max-width: 640px) {
+            .logo-card { min-width: 130px; height: 60px; }
+            .logo-mark { width: 36px; height: 36px; font-size:13px; border-radius:8px; }
+          }
+        `}</style>
+
+        <div className="logo-track" style={{ whiteSpace: 'nowrap' }}>
+          {doubled.map((l, idx) => (
+            <div
+              key={`${l.id}-${idx}`}
+              className="logo-card"
+              style={{ background: l.bg }}
+              role="img"
+              aria-label={l.label}
+              title={l.label}
+            >
+              <div className="logo-inner">
+                <div
+                  className="logo-mark"
+                  style={{ background: (l.fg ? l.fg : 'rgba(0,0,0,0.08)') }}
+                >
+                  {/* use initials as a lightweight mark */}
+                  {l.label
+                    .split(' ')
+                    .map((p) => p[0])
+                    .slice(0, 2)
+                    .join('')
+                    .toUpperCase()}
+                </div>
+                <div className="logo-label">{l.label}</div>
               </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-const Home: React.FC = () => {
+const Home = () => {
+  // brand background colors (kept accessible & visually distinct)
+  const logos: Logo[] = [
+    { id: 'upwork', label: 'Upwork', bg: '#1fb57a', fg: 'rgba(255,255,255,0.06)' },
+    { id: 'firefox', label: 'Firefox', bg: '#ff9400', fg: 'rgba(255,255,255,0.06)' },
+    { id: 'apple', label: 'Apple', bg: '#111827', fg: 'rgba(255,255,255,0.06)' },
+    { id: 'google', label: 'Google', bg: '#ffffff', fg: '#f3f4f6' },
+    { id: 'microsoft', label: 'Microsoft', bg: '#f3f4f6', fg: '#111827' },
+    { id: 'facebook', label: 'Facebook', bg: '#1877f2', fg: 'rgba(255,255,255,0.06)' },
+    { id: 'youtube', label: 'YouTube', bg: '#ff0000', fg: 'rgba(255,255,255,0.06)' },
+  ];
+
   return (
     <div className="min-h-screen relative">
       <VideoBackground overlayOpacity={0.14} />
@@ -124,9 +238,8 @@ const Home: React.FC = () => {
             </Link>
           </div>
 
-          {/* Logo slider: default speed is 0.5 seconds per slide.
-              If you want to pass milliseconds, use speed={500}. */}
-          <LogoSlider speed={0.5} />
+          {/* Logo slider placed beneath hero CTAs */}
+          <LogoSlider logos={logos} initialSpeed={DEFAULT_SPEED} />
         </div>
       </section>
 

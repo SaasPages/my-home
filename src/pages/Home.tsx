@@ -272,7 +272,7 @@ const Home = () => {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg sm:text-xl md:text-2xl mb-8 lg:mb-12 text-primary-foreground/90 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl mb-8 lg:mb-12 text-primary-foreground/0.5 max-w-2xl mx-auto leading-relaxed">
             Crafting beautiful digital experiences with passion and precision across all platforms
           </p>
 
@@ -331,7 +331,7 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="flex py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-muted/20 backdrop-blur-sm">
+      <section className="flex py-16 lg:py-24 px-4 sm:px-6 lg:px-8 bg-muted/0.5 backdrop-blur-sm">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 text-primary-foreground">
             What I Do
@@ -349,7 +349,7 @@ const Home = () => {
             ].map((service, index) => (
               <div 
                 key={index}
-                className="glass p-6 lg:p-8 rounded-2xl text-left backdrop-blur-sm border border-white/0.3 hover:border-white/0 transition-all duration-300 hover:transform hover:-translate-y-1"
+                className="glass p-6 lg:p-8 rounded-2xl text-left backdrop-blur-sm border border-white/0 hover:border-white/0 transition-all duration-110 hover:transform hover:-translate-y-1"
               >
                 <h3 className="text-lg lg:text-xl font-bold mb-3 text-primary-foreground">
                   {service.title}

@@ -224,7 +224,7 @@ const Gallery = () => {
                           </button>
 
                           {/* Meta badges */}
-                          <div className="absolute bottom-3 right-3 bg-black/75 text-white text-xs px-2 py-1 rounded">
+                          <div className="absolute bottom-3 right-3 bg-background/75 backdrop-blur-sm text-foreground text-xs px-2 py-1 rounded">
                             {video.duration}
                           </div>
                           <div className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
@@ -232,11 +232,11 @@ const Gallery = () => {
                           </div>
 
                           {/* Subtle parallax title */}
-                          <div className="absolute left-6 bottom-6 text-white">
+                          <div className="absolute left-6 bottom-6 text-primary-foreground drop-shadow-lg">
                             <h3 className="text-xl md:text-2xl font-semibold drop-shadow-lg">
                               {video.title}
                             </h3>
-                            <p className="text-sm text-white/80 mt-1">
+                            <p className="text-sm text-primary-foreground/80 mt-1">
                               {video.category} • {video.duration}
                             </p>
                           </div>
@@ -292,7 +292,7 @@ const Gallery = () => {
                     decoding="async"
                   />
                   <div
-                    className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute inset-0 bg-background/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     onClick={() => video.videoUrl && setPlayingUrl(video.videoUrl)}
                     role="button"
                     aria-label={`Play ${video.title}`}
@@ -301,7 +301,7 @@ const Gallery = () => {
                       <Play className="w-8 h-8 text-primary-foreground ml-1" fill="currentColor" />
                     </div>
                   </div>
-                  <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
+                  <div className="absolute bottom-2 right-2 bg-background/80 backdrop-blur-sm text-foreground text-xs px-2 py-1 rounded">
                     {video.duration}
                   </div>
                   <div className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
@@ -334,14 +334,14 @@ const Gallery = () => {
       {/* Modal for embedded video playback */}
       {playingUrl && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-md p-4"
           role="dialog"
           aria-modal="true"
         >
-          <div className="relative w-full max-w-4xl aspect-video bg-black rounded-md overflow-hidden shadow-2xl">
+          <div className="relative w-full max-w-4xl aspect-video bg-background rounded-md overflow-hidden shadow-2xl border border-border">
             <button
               onClick={() => setPlayingUrl(null)}
-              className="absolute top-3 right-3 z-20 bg-background/80 hover:bg-background/100 p-2 rounded-full"
+              className="absolute top-3 right-3 z-20 bg-background/90 hover:bg-background p-2 rounded-full backdrop-blur-sm"
               aria-label="Close video"
             >
               <X className="w-5 h-5" />

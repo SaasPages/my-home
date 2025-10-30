@@ -202,7 +202,7 @@ const Clients = () => {
                 <div className={`absolute inset-0 bg-gradient-to-br ${client.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
                 
                 <div className="relative z-10 text-center">
-                  <div className={`w-12 h-12 mx-auto mb-3 rounded-lg bg-gradient-to-br ${client.gradient} flex items-center justify-center text-white font-bold text-xl group-hover:scale-110 transition-transform duration-300`}>
+                  <div className={`w-12 h-12 mx-auto mb-3 rounded-lg bg-gradient-to-br ${client.gradient} flex items-center justify-center text-primary-foreground font-bold text-xl group-hover:scale-110 transition-transform duration-300`}>
                     {client.name.charAt(0)}
                   </div>
                   <span className="font-bold text-lg text-primary-foreground group-hover:text-primary transition-colors">

@@ -184,6 +184,8 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground transition-colors duration-300;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .gradient-bg {
@@ -194,6 +196,23 @@ All colors MUST be HSL.
     background: hsl(var(--background) / 0.8);
     backdrop-filter: blur(10px);
     border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* Text contrast utilities */
+  .text-contrast {
+    color: hsl(var(--foreground));
+  }
+
+  .text-contrast-muted {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .text-on-primary {
+    color: hsl(var(--primary-foreground));
+  }
+
+  .text-on-accent {
+    color: hsl(var(--accent-foreground));
   }
 }
 

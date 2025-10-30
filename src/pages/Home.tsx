@@ -167,7 +167,7 @@ const Home = () => {
                 className="glass p-6 rounded-2xl text-left backdrop-blur-md border border-primary-foreground/20 hover:border-primary/40 transition-all duration-300 hover-scale group"
               >
                 <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} p-3 mb-4 group-hover:scale-110 transition-transform`}>
-                  <service.icon className="w-full h-full text-white" />
+                  <service.icon className="w-full h-full text-primary-foreground" />
                 </div>
                 <h3 className="text-lg font-bold mb-3 text-primary-foreground">
                   {service.title}

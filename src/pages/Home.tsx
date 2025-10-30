@@ -9,15 +9,18 @@ type Logo = {
   label: string;
   bg: string;
   fg?: string;
+  link?: string;
 };
 
 const Home = () => {
   const logos: Logo[] = [
-    { id: 'upwork', label: 'Upwork', bg: 'linear-gradient(135deg, #1fb57a, #14a871)', fg: 'rgba(255,255,255,0.08)' },
-    { id: 'firefox', label: 'Firefox', bg: 'linear-gradient(135deg, #ff9400, #e68500)', fg: 'rgba(255,255,255,0.08)' },
-    { id: 'apple', label: 'Apple', bg: 'linear-gradient(135deg, #111827, #000000)', fg: 'rgba(255,255,255,0.08)' },
-    { id: 'google', label: 'Google', bg: 'linear-gradient(135deg, #CA3F16, #F3F4F5)', fg: '#FF5A45' },
-    { id: 'microsoft', label: 'Microsoft', bg: 'linear-gradient(135deg, #F4F1EC, #9BACD8)', fg: '#111144' },
+    { id: 'upwork', label: 'Upwork', bg: 'linear-gradient(135deg, #1fb57a, #14a871)', fg: 'rgba(255,255,255,0.08)', link: 'https://www.upwork.com' },
+    { id: 'firefox', label: 'Firefox', bg: 'linear-gradient(135deg, #ff9400, #e68500)', fg: 'rgba(255,255,255,0.08)', link: 'https://www.mozilla.org/firefox' },
+    { id: 'apple', label: 'Apple', bg: 'linear-gradient(135deg, #111827, #000000)', fg: 'rgba(255,255,255,0.08)', link: 'https://www.apple.com' },
+    { id: 'google', label: 'Google', bg: 'linear-gradient(135deg, #4285F4, #34A853)', fg: 'rgba(255,255,255,0.08)', link: 'https://www.google.com' },
+    { id: 'microsoft', label: 'Microsoft', bg: 'linear-gradient(135deg, #00A4EF, #FFB900)', fg: 'rgba(255,255,255,0.08)', link: 'https://www.microsoft.com' },
+    { id: 'amazon', label: 'Amazon', bg: 'linear-gradient(135deg, #FF9900, #146EB4)', fg: 'rgba(255,255,255,0.08)', link: 'https://www.amazon.com' },
+    { id: 'netflix', label: 'Netflix', bg: 'linear-gradient(135deg, #E50914, #B20710)', fg: 'rgba(255,255,255,0.08)', link: 'https://www.netflix.com' },
   ];
 
   return (

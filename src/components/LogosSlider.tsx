@@ -8,6 +8,7 @@ type Logo = {
   label: string;
   bg: string;
   fg?: string;
+  link?: string;
 };
 
 const DEFAULT_SPEED = 20;
@@ -167,30 +168,45 @@ const LogosSlider: React.FC<{
         `}</style>
 
         <div className={cn("logo-track", isPaused && "paused")}>
-          {doubled.map((l, idx) => (
-            <div
-              key={`${l.id}-${idx}`}
-              className="logo-card"
-              style={{ background: l.bg }}
-              role="img"
-              aria-label={l.label}
-            >
-              <div className="logo-inner">
-                <div
-                  className="logo-mark"
-                  style={{ background: (l.fg ? l.fg : 'rgba(0,0,0,0.15)') }}
-                >
-                  {l.label
-                    .split(' ')
-                    .map((p) => p[0])
-                    .slice(0, 2)
-                    .join('')
-                    .toUpperCase()}
+          {doubled.map((l, idx) => {
+            const logoContent = (
+              <div
+                className="logo-card"
+                style={{ background: l.bg }}
+                role="img"
+                aria-label={l.label}
+              >
+                <div className="logo-inner">
+                  <div
+                    className="logo-mark"
+                    style={{ background: (l.fg ? l.fg : 'rgba(0,0,0,0.15)') }}
+                  >
+                    {l.label
+                      .split(' ')
+                      .map((p) => p[0])
+                      .slice(0, 2)
+                      .join('')
+                      .toUpperCase()}
+                  </div>
+                  <div className="logo-label">{l.label}</div>
                 </div>
-                <div className="logo-label">{l.label}</div>
               </div>
-            </div>
-          ))}
+            );
+
+            return l.link ? (
+              <a
+                key={`${l.id}-${idx}`}
+                href={l.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:opacity-80 transition-opacity"
+              >
+                {logoContent}
+              </a>
+            ) : (
+              <div key={`${l.id}-${idx}`}>{logoContent}</div>
+            );
+          })}
         </div>
       </div>
     </div>

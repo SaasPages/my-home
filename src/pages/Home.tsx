@@ -76,10 +76,10 @@ const Home = () => {
           {/* Skills Highlight */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 px-4">
             {[
-              { icon: Code2, label: 'Clean Code', color: 'text-blue-400' },
-              { icon: Palette, label: 'UI/UX Design', color: 'text-purple-400' },
-              { icon: Rocket, label: 'Fast Delivery', color: 'text-green-400' },
-              { icon: Sparkles, label: 'Innovation', color: 'text-yellow-400' }
+              { icon: Code2, label: 'Clean Code', color: 'text-primary' },
+              { icon: Palette, label: 'UI/UX Design', color: 'text-accent' },
+              { icon: Rocket, label: 'Fast Delivery', color: 'text-primary' },
+              { icon: Sparkles, label: 'Innovation', color: 'text-accent' }
             ].map((item, index) => (
               <div 
                 key={index}

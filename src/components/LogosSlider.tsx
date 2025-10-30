@@ -132,14 +132,14 @@ const LogosSlider: React.FC<{
             justify-content: center;
             font-weight: 700;
             font-size: 10px;
-            color: white;
+            color: hsl(var(--primary-foreground));
             flex-shrink: 0;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) inset;
             backdrop-filter: blur(4px);
           }
 
           .logo-label {
-            color: rgba(255, 255, 255, 0.95);
+            color: hsl(var(--primary-foreground));
             font-weight: 600;
             font-size: 0.7rem;
             white-space: nowrap;
